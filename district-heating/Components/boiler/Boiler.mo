@@ -2156,5 +2156,9 @@ package DistrictHeating
 end DistrictHeating;
 package DistrictHeating_Components_Boiler
  extends DistrictHeating.Components.Boiler;
-  annotation(uses(DistrictHeating(version="0.6.0")));
+  annotation(experiment(
+    StopTime=1,
+    __Dymola_NumberOfIntervals=500,
+    Tolerance=0.0001,
+    __Dymola_Algorithm="dassl"),uses(DistrictHeating(version="0.6.0")));
 end DistrictHeating_Components_Boiler;
