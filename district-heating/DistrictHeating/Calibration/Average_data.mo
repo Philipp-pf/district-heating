@@ -2,6 +2,20 @@ within DistrictHeating.Calibration;
 model Average_data
 
 extends Modelica.Icons.Example;
+
+ parameter String fileNameStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Straw_average.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameOil = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Oil_average.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Wood_average.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameStore = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Store.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameTemperature = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Outsidetemperature_average.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameNet = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_average.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+
 Modelica.SIunits.Heat StoreLossesOrig
     "Difference between int produced heat and int used heat (messured)";
     Real EtaStore "Store Energy Efficiency";
@@ -33,9 +47,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     tableName="Netzleistung",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Net_average.txt")
-                                                                annotation (
+    fileName=fileNameNet)                                       annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -46,8 +58,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     columns={2,3,4,5,6,7},
     tableName="Oelleistung",
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Oil_average.txt")
+    fileName=fileNameOil)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -57,8 +68,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     columns={2,3,4,5,6,7},
     tableName="Hackgutleistung",
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Wood_average.txt")
+    fileName=fileNameWood)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -68,8 +78,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     columns={2,3,4,5,6,7},
     tableName="Strohleistung",
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Straw_average.txt")
+    fileName=fileNameStraw)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -77,10 +86,9 @@ Modelica.SIunits.Heat StoreLossesOrig
   Modelica.Blocks.Sources.CombiTimeTable Store_source(
     tableOnFile=true,
     tableName="Speicherenergie",
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Store.txt",
     columns={2,3,4,5,6,7},
-    smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments) annotation (
+    smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
+    fileName=fileNameStore)                                     annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -131,9 +139,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     tableName="Aussentemperatur",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=
-        "C:/Users/Philipp/Desktop/Masterthese/Dymola/District_Heating/Resources/Data/Outsidetemperature_average.txt")
-                                                                annotation (
+    fileName=fileNameTemperature)                               annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
