@@ -33,5 +33,8 @@ equation
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=10),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<p>Shows, if the variable thermal conductor works correct.</p>
+</html>"));
 end VariableThermalConductor;

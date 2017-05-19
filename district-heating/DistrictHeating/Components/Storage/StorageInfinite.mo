@@ -95,9 +95,9 @@ infinite"),
 <p>This storage model has infinite energy storage capacitiy. </p>
 <p>Thermal storage losses are considered by using the thermal conductance G. </p>
 <p>The conductance G is calculated by:</p>
-<p><img src=\"modelica://DistrictHeating/Resources/Images/G-Formula.png\"/></p>
+<p><span style=\"font-family: Arial,sans-serif;\">G=Sum(Ui*Ai)</span></p>
 <p>with Ai...partial area of the storage surface [m&sup2;]</p>
-<p>        Ui...heat transition coefficient of the partial area [W/(m&sup2;*K)]</p>
+<p>Ui...heat transition coefficient of the partial area [W/(m&sup2;*K)]</p>
 <p>If thermal losses are not considered then G=0</p>
 </html>"));
 end StorageInfinite;

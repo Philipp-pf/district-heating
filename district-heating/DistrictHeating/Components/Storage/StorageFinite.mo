@@ -272,7 +272,7 @@ finite")}),                                                      Diagram(
 <p><br><span style=\"font-family: MS Shell Dlg 2;\">The stored heat is calculated by the heat capacity multiplied by the temperature difference between the storage temperature and the reference temperature.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Thermal storage losses are considered by using the thermal conductance G. </span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The conductance G is calculated by:</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\"><img src=\"modelica://DistrictHeating/Resources/Images/G-Formula.png\"/></span></p>
+<p><span style=\"font-family: Arial,sans-serif;\">G=Sum(Ui*Ai)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">with Ai...partial area of the storage surface [m&sup2;]</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Ui...heat transition coefficient of the partial area [W/(m&sup2;*K)]</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">If thermal losses are not considered then G=0</span></p>
