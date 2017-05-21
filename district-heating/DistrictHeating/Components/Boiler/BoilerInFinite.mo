@@ -105,5 +105,4 @@ Heat=heat_counter.y;
 <p>If the Boolean parameter limited_heat is true, the boiler has a maximal heat flow. Higher nominal inputs are limited at maximal heat flow. </p>
 <p>Additionally the model has a counter for the heat flow (integrator). </p>
 </html>"));
-
 end BoilerInFinite;
