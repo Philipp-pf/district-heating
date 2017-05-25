@@ -1,60 +1,53 @@
 within DistrictHeating.Examples.Storage;
 model StorageTwoLayer
-  extends Modelica.Icons.Example;
-  Modelica.Blocks.Sources.Cosine cosine(
-    freqHz=0.1,
-    startTime=0,
-    offset=0,
-    amplitude=5,
-    phase=3.1415926535898) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={0,-44})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow
-    annotation (Placement(transformation(extent={{-42,-10},{-22,10}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow
-    prescribedHeatFlow1 annotation (Placement(transformation(
+  import StorageTwoLayer;
+
+extends Modelica.Icons.Example;
+
+  DistrictHeating.Components.Boiler.BoilerInFinite boilerInFinite(limited_heat=false,
+      Qmax=1)
+    annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+  DistrictHeating.Components.Consumers.ConsumerTimeDependExt
+    consumerTimeDependExt
+    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+  Modelica.Blocks.Sources.Constant const(k=2e6)
+    annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
+  Modelica.Blocks.Sources.Constant const1(k=1.99e6) annotation (Placement(
+        transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={40,0})));
-  Modelica.Blocks.Sources.Ramp ramp(
-    height=500,
-    duration=2,
-    offset=0,
-    startTime=2) annotation (Placement(transformation(
+        origin={70,0})));
+  Modelica.Blocks.Sources.Constant const2(k=283.15) annotation (Placement(
+        transformation(
         extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={0,66})));
-  Modelica.Blocks.Math.Gain gain(k=-1)
-    annotation (Placement(transformation(extent={{26,20},{46,40}})));
-  Components.Storage.StorageTwoLayer storageInfinite(
-    der_T=0,
-    U=0.01,
-    V=0.01,
-    H=0.1,
-    Tref=313.15,
-    Tup=363.15,
-    Tdown=313.15,
-    Tstart=323.15)
+        rotation=90,
+        origin={0,-50})));
+  Components.Storage.StorageTwoLayer storageTwoLayer(
+    V=137,
+    H=22,
+    U=10,
+    Thigh=363.15,
+    Tlow=323.15,
+    Tref=323.15,
+    Hboard(fixed=true, start=15))
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 equation
-  connect(prescribedHeatFlow.Q_flow,ramp. y) annotation (Line(points={{-42,0},
-          {-54,0},{-62,0},{-62,30},{0,30},{0,55}}, color={0,0,127}));
-  connect(prescribedHeatFlow1.Q_flow,gain. y) annotation (Line(points={{50,0},{
-          60,0},{72,0},{72,30},{47,30}},  color={0,0,127}));
-  connect(gain.u,ramp. y) annotation (Line(points={{24,30},{0,30},{0,55}},
-                             color={0,0,127}));
-  connect(prescribedHeatFlow.port, storageInfinite.heat_input)
-    annotation (Line(points={{-22,0},{-16,0},{-10,0}}, color={191,0,0}));
-  connect(prescribedHeatFlow1.port, storageInfinite.heat_output)
-    annotation (Line(points={{30,1.22125e-015},{20,1.22125e-015},{20,0},{
-          10,0}}, color={191,0,0}));
-  connect(cosine.y, storageInfinite.outside_temp)
-    annotation (Line(points={{0,-33},{0,-10.4}}, color={0,0,127}));
-  annotation (Documentation(info="<html>
-<p><span style=\"font-family: MS Shell Dlg 2;\">The storage is loaded and unloaded in the same amount. </span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Through the thermal losses of the storage the temperature in the storage decreases. </span></p>
-</html>"),
-    experiment(StopTime=10, __Dymola_NumberOfIntervals=5000),
-    __Dymola_experimentSetupOutput);
+  connect(const.y, boilerInFinite.nominal_heat)
+    annotation (Line(points={{-59,0},{-40.4,0}}, color={0,0,127}));
+  connect(consumerTimeDependExt.positive_heat_flow, const1.y)
+    annotation (Line(points={{40.6,0},{59,0}}, color={0,0,127}));
+  connect(boilerInFinite.thermal_heat_flow, storageTwoLayer.port_a)
+    annotation (Line(points={{-20,0},{-16,0},{-10,0}}, color={191,0,0}));
+  connect(consumerTimeDependExt.heat_flow, storageTwoLayer.port_b)
+    annotation (Line(points={{20,0},{16,0},{10,0}}, color={191,0,0}));
+  connect(const2.y, storageTwoLayer.u) annotation (Line(points={{7.21645e-016,
+          -39},{0,-39},{0,-11.4}}, color={0,0,127}));
+  annotation (
+    Icon(coordinateSystem(preserveAspectRatio=false)),
+    Diagram(coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=10000, Interval=20),
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<p>The sum of consumer heat flow and store loss heat flow is higher than the produced boiler heat flow. So the stored heat decreases.</p>
+</html>"));
 end StorageTwoLayer;

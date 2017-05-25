@@ -1,127 +1,85 @@
 within DistrictHeating.Components.Storage;
-model StorageTwoLayer "Storage Model with infinite Energy Storage"
+model StorageTwoLayer
 
-   parameter Modelica.SIunits.Volume V(start=137) "Net-Volume of the store";
-   parameter Modelica.SIunits.Height H(start=22) "Net-Height of the store";
-   parameter Modelica.SIunits.Temperature Tref(start=293.15, displayUnit="degC")
-    "Referencetemperature of the storage";
-   parameter Modelica.SIunits.Temperature Tup(start=363.15, displayUnit="degC")
-    "Temperature in the upper part of the store" annotation(Dialog(group="Storage losses"));
-   parameter Modelica.SIunits.Temperature Tdown(start=313.15, displayUnit="degC")
-    "Temperature in the lower part of the store" annotation(Dialog(group="Storage losses"));
-   parameter Modelica.SIunits.CoefficientOfHeatTransfer U( start=0.2)
-    "U-Value of the Storage Wall" annotation(Dialog(group="Storage losses"));
-   parameter Modelica.SIunits.Temperature Tstart(start=293.15, displayUnit="degC")
-    "Starttemperature of the storage" annotation(Dialog(group="Initialization"));
-   parameter Modelica.SIunits.TemperatureSlope der_T( start=0)
-    "Time derivative of temperature (= der(T))" annotation(Dialog(group="Initialization"));
-   parameter Modelica.SIunits.Density Rho=995.6 "Desity of the Store Fluid";
-   parameter Modelica.SIunits.SpecificHeatCapacity Cp=4177
-    "Specific Heat Capacity of the Store Fluid";
+    parameter Modelica.SIunits.Volume V "Storage Volume";
+    parameter Modelica.SIunits.Height H "Storage Height";
+    parameter Modelica.SIunits.Temperature Thigh
+    "Temperature of the upper Storage Part" annotation(Dialog(group="Temperatures"));
+    parameter Modelica.SIunits.Temperature Tlow
+    "Temperature of the lower Storage Part" annotation(Dialog(group="Temperatures"));
+    parameter Modelica.SIunits.Temperature Tref
+    "Reference Temperature of the Storage" annotation(Dialog(group="Temperatures"));
+    parameter Modelica.SIunits.Density rho=995.6
+    "Density of the storage medium"                                              annotation(Dialog(group="Medium"));
+    parameter Modelica.SIunits.SpecificHeatCapacity cp=4177
+    "specific heat capacity of the storage medium" annotation(Dialog(group="Medium"));
+    parameter Modelica.SIunits.CoefficientOfHeatTransfer U
+    "U-Value of the Storage" annotation(Dialog(group="Storage losses"));
 
-   Modelica.SIunits.Temperature T_actual "current storage temperature";
-   Modelica.SIunits.Heat Stored_Heat
-    "Stored heat refered to Referencetemperature";
-   Modelica.SIunits.ThermalConductance G "Thermal conductance of the storage";
-   Modelica.SIunits.Height Hboard
-    "Height of the border between hot and cold parts of the store";
-   Modelica.SIunits.Area Adown "Surface of the cold part of the store";
-   Modelica.SIunits.Area Aup "Surface of the hot part of the store";
-   Modelica.SIunits.Diameter D "Net-Diameter of the store";
-   Modelica.SIunits.Temperature Tout=outside_temp
-    "Outside Temperature from extern";
+   constant Real pi=Modelica.Constants.pi;
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_input
+   Modelica.SIunits.Volume Vhigh "Volume of the upper Storage Part";
+   Modelica.SIunits.Volume Vlow "Volume of the lower Storage Part";
+   Modelica.SIunits.Diameter D( start=2)
+    "Storage Diameter (aproximative value)";
+   Modelica.SIunits.Height Hboard( start=15)
+    "Height of the boarder between hot and cold layer from ground (Hstart=0: Store fully loaded, Hstart=H: Store 'empty')";
+   Modelica.SIunits.Heat Q
+    "Stored heat in reference to the  reference temperature";
+   Modelica.SIunits.HeatFlowRate Qload "Heat flow that loads up the storage";
+   Modelica.SIunits.HeatFlowRate Qunload "Heat flow that unloads the storage";
+   Modelica.SIunits.HeatFlowRate Qloss "Store Losses";
+   Modelica.SIunits.Temperature Tout "Outside Temperature";
+
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b heat_output
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor Store(
-    T(start=Tstart, fixed=true),
-    der_T(start=der_T),
-    C=V*Rho*Cp)
-    annotation (Placement(transformation(extent={{-10,30},{10,50}})));
-  Modelica.Blocks.Interfaces.RealInput outside_temp annotation (Placement(
-        transformation(
+  Modelica.Blocks.Interfaces.RealInput u "Outsidetemperature" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=90,
-        origin={0,-104})));
-  Modelica.Blocks.Interfaces.RealOutput store_temp annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={0,104})));
-
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature outside_temperature
-    annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={0,-68})));
-  Others.VariableThermalConductor                           coat_losses
-    annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={0,-14})));
-  Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor Heat_Losses annotation (
-      Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={0,-42})));
+        origin={0,-114})));
 
 equation
-T_actual=Store.T;
-T_actual=store_temp;
-Stored_Heat=Store.C*(T_actual-Tref);
-
-D=sqrt((4*V)/(Modelica.Constants.pi*H));
-H*(T_actual-Tref)=Hboard*(Tdown-Tref)+(H-Hboard)*(Tup-Tref);
-Adown=D*D*Modelica.Constants.pi/4+D*Modelica.Constants.pi*Hboard;
-Aup=D*D*Modelica.Constants.pi/4+D*Modelica.Constants.pi*(H-Hboard);
-G=(U/(T_actual-Tout))*(Aup*(Tup-Tout)+Adown*(Tdown-Tout));
-G=coat_losses.Thermal_conduct;
-
-connect(heat_input, heat_output)
-    annotation (Line(points={{-100,0},{0,0},{100,0}}, color={191,0,0}));
-
-  connect(Store.port, heat_output)
-    annotation (Line(points={{0,30},{0,0},{100,0}}, color={191,0,0}));
-  connect(coat_losses.port_a,Heat_Losses. port_a) annotation (Line(points={{0,-24},
-          {0,-24},{0,-32}},                         color={191,0,0}));
-  connect(outside_temperature.port,Heat_Losses. port_b) annotation (Line(points={{0,-58},
-          {0,-58},{0,-52}},                                        color={191,0,
-          0}));
-  connect(outside_temperature.T, outside_temp) annotation (Line(points={{-6.66134e-016,
-          -80},{0,-80},{0,-104}}, color={0,0,127}));
-  connect(coat_losses.port_b, heat_output)
-    annotation (Line(points={{0,-4},{0,0},{100,0}}, color={191,0,0}));
+  V=H*(D*D*pi)/4 "calculation for Store Diameter";
+  Vhigh+Vlow=V "Sum of store volume";
+  Vlow=Hboard*(D*D*pi)/4 "Store volume of low temperature";
+  Q=cp*rho*(Vhigh*(Thigh-Tref)+Vlow*(Tlow-Tref))
+    "Stored Heat reffered to referencetemperature";
+  Qloss= U*(((D*D*pi)/4+D*pi*Hboard)*(Tlow-Tout)+((D*D*pi)/4+D*pi*(H-Hboard))*(Thigh-Tout))
+    "Store losses";
+  Qload=port_a.Q_flow "Loading Heat flow";
+  Qunload=-port_b.Q_flow "unloading heat flow";
+  der(Q)=Qload-Qunload-Qloss "first thermodynamic law";
+  port_a.T=port_b.T "equal Temperature at both ports";
+  port_a.T=Thigh "temperature of ports";
+  u=Tout "Input outside temperature";
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
-        Rectangle(extent={{-100,100},{100,-100}}, lineColor={0,0,0}),
         Rectangle(
-          extent={{-100,100},{100,0}},
-          lineColor={0,0,0},
+          extent={{-60,80},{60,-20}},
+          lineColor={255,0,0},
           fillColor={255,0,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{-100,0},{100,-100}},
-          lineColor={0,0,0},
+          extent={{-60,-20},{60,-80}},
+          lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid),
+        Rectangle(extent={{-100,100},{100,-100}}, lineColor={0,0,0}),
+        Rectangle(extent={{-60,80},{60,-80}}, lineColor={0,0,0}),
         Text(
-          extent={{-74,10},{74,-10}},
+          extent={{-88,140},{88,98}},
           lineColor={0,0,0},
-          fillColor={0,0,255},
-          fillPattern=FillPattern.Solid,
-          textString="Two Layer
-
-Storage"),
+          textString="%name"),
         Text(
-          extent={{-62,130},{66,106}},
-          lineColor={28,108,200},
-          textString="%name")}),                                 Diagram(
+          extent={{-46,62},{48,-66}},
+          lineColor={0,0,0},
+          textString="2")}),                                     Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>This storage model has finite energy storage capacitiy, given by the volume of the storage. </p>
-<p>Thermal storage losses are considered by using the thermal U-value of the storage wall. </p>
-<p>The model has two water layers (these physically don&apos;t exist, only by equations), a high temperature layer (Tup) at the top and a low temperature layer (Tdown) at the bottom. Between these two layers there is a boarder. </p>
-<p>Dependent to the store temperature, the boarder rises or falls. With the boarder height the thermal conductance of the store wall is calculated, so that the heat flow loss of the single heat capacity equals to the two layer storage model. </p>
+<p>This storage model has two layers. Between the two layers there is a &QUOT;boarder layer&QUOT;. The upper part of the storage (above the boarder has high temperature. The lower part of the storage has lower temperature. To get a two layer store in real, it is neccessary that the storage height is much higher than the diameter (H&GT;&GT;D). </p>
+<p>The model assumes, that the boarder layer has a thickness of zero. </p>
+<p>The temperatures of the upper and lower layer are constant. Store losses don&apos;t cause a temperature decrease in the layer, they cause an increase of the boarder height (higher boarder height means lower stored heat). </p>
+<p>For true simulation results it is neccessary that the boarder height always stays within the physical boarders of the storage (0&LT;=Hboard&LT;=H).</p>
 </html>"));
 end StorageTwoLayer;
