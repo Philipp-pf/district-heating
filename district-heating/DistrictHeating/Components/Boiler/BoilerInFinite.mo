@@ -5,7 +5,7 @@ model BoilerInFinite
   //Source bitmap: https://pixabay.com/de/feuer-gelb-flamme-rot-brennen-30276/
 
 parameter Boolean limited_heat=false "Use limited heat flow of the boiler";
-parameter Modelica.SIunits.HeatFlowRate Qmax(start=1000, fixed=true)
+parameter Modelica.SIunits.HeatFlowRate Qmax=1000
     "maximal thermal heat flow rate of the boiler"
 annotation (Dialog(enable= limited_heat));
 Modelica.SIunits.HeatFlowRate HeatFlowRate;
