@@ -6,7 +6,9 @@ Real CalculatedEfficiency
     "calculated efficiency as qoutient of actual heat divided by fuel heat";
 
   DistrictHeating.Components.Control.FuelEfficiency fuelEfficiency(
-      EfficiencyTable=[0,0.3; 1000,0.5; 2000,0.7; 3000,0.85; 4000,0.8])
+      EfficiencyTable=[0,0.3; 1000,0.5; 2000,0.7; 3000,0.85; 4000,0.8],
+    ChangeTime=1,
+    ChangeEfficiency=0.9)
     annotation (Placement(transformation(extent={{12,-40},{32,-20}})));
   Modelica.Blocks.Sources.Ramp ramp(
     height=4000,
