@@ -9,7 +9,7 @@ extends Modelica.Blocks.Interfaces.SISO;
     parameter Real ChangeEfficiency(min=0.01, max=1)
     "Efficiency Factor while heat flow changes (not needed if ChamgeTime=0)";
 
-  Real Efficiency=combiTable1D.y[1] "Efficiency";
+  Real Efficiency=combiTable1D.y[1]*heatChange.y "Efficiency";
    Modelica.SIunits.HeatFlowRate HeatFlowIn
     "Useful heat flow which the boiler produced";
     Modelica.SIunits.HeatFlowRate FuelHeatFlow
@@ -48,7 +48,7 @@ extends Modelica.Blocks.Interfaces.SISO;
   Modelica.Blocks.Continuous.FirstOrder firstOrder(k=1, initType=Modelica.Blocks.Types.Init.InitialState,
     T=ChangeTime)
     annotation (Placement(transformation(extent={{-88,-60},{-68,-40}})));
-  Modelica.Blocks.Logical.GreaterThreshold greaterThreshold(threshold=0)
+  Modelica.Blocks.Logical.GreaterThreshold greaterThreshold(threshold=0.01)
     annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
   Modelica.Blocks.Math.Division division1
     annotation (Placement(transformation(extent={{72,-10},{92,10}})));
@@ -121,5 +121,7 @@ integrator.y=FuelHeat;
 <p>The table defines the heat flow efficiency (right column) dependent of the actual heat flow (left column). </p>
 <p>In times where input heat flow is not constant (derivative unequal zero), the boiler efficiency can be reduced by factor ChangeEfficiency. </p>
 <p>Fuel Heat Flow=Actual Heat Flow/(Efficiencyfactor by CombiTimeTable * Change Efficiency).</p>
-</html>"));
+</html>"),
+    experiment(StopTime=50),
+    __Dymola_experimentSetupOutput);
 end FuelEfficiency;

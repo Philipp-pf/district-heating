@@ -44,7 +44,7 @@ equation
           0,10},{0,10},{0,-10},{0,-30},{10,-30}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=5),
+    experiment(StopTime=50),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <p>In this example the needed fuel heat flow is determined. </p>
