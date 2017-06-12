@@ -42,8 +42,8 @@ connect(Store.heat_output, consumerTimeDependExt.heat_flow)
   annotation (Line(points={{10,0},{10,0},{40,0}}, color={191,0,0}));
   connect(Store.outside_temp, ConstantOutsidetemperature.y)
     annotation (Line(points={{0,-10.4},{0,-10.4},{0,-19}}, color={0,0,127}));
-  connect(consumerTimeDependExt.positive_heat_flow, ConsumerStep.y) annotation
-    (Line(points={{60.6,0},{79,0},{79,1.33227e-015}}, color={0,0,127}));
+  connect(consumerTimeDependExt.positive_heat_flow, ConsumerStep.y) annotation (
+     Line(points={{60.6,0},{79,0},{79,1.33227e-015}}, color={0,0,127}));
   connect(BoilerStep.y, boilerInFinite.nominal_heat)
     annotation (Line(points={{-79,0},{-60.4,0}}, color={0,0,127}));
 connect(Store.heat_input, boilerInFinite.thermal_heat_flow)
