@@ -44,7 +44,8 @@ model ConstantBoilerHeatFlow
   DistrictHeating.Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase(
         displayUnit="kW") = 2200000, Qpeak(displayUnit="kW") = 800000)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-  OverTimeConstant.MeanBoilerHeat meanBoilerHeat(
+  Components.Control.MeanBoilerHeat
+                                  meanBoilerHeat(
     TimeConstant(displayUnit="h") = 86400,
     preYstart=true,
     khigh1=1.15,
@@ -57,7 +58,7 @@ model ConstantBoilerHeatFlow
     Tlow=323.15) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={0,48})));
+        origin={0,50})));
 equation
   connect(Store.outside_temp, Outside_Temp_source.y[6])
     annotation (Line(points={{0,-10.4},{0,-19}}, color={0,0,127}));
@@ -68,11 +69,11 @@ equation
   connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
     annotation (Line(points={{60.6,0},{70,0},{79,0},{79,0}}, color={0,0,127}));
   connect(consumerTimeDependExt.heat_demand, meanBoilerHeat.u) annotation (Line(
-        points={{39.4,7},{26,7},{26,48},{11.2,48}}, color={0,0,127}));
+        points={{39.4,7},{26,7},{26,50},{11.2,50}}, color={0,0,127}));
   connect(Store.store_temp, meanBoilerHeat.u1)
-    annotation (Line(points={{0,10.4},{0,37.6}}, color={0,0,127}));
+    annotation (Line(points={{0,10.4},{0,39.6}}, color={0,0,127}));
   connect(meanBoilerHeat.y, boilerBasicPeak.nominal_heat) annotation (Line(
-        points={{-10.8,48},{-80,48},{-80,0},{-60.4,0}}, color={0,0,127}));
+        points={{-10.8,50},{-80,50},{-80,0},{-60.4,0}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

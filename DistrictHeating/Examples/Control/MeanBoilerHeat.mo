@@ -2,7 +2,8 @@ within DistrictHeating.Examples.Control;
 model MeanBoilerHeat "Shows the usage of the MeanBoilerHeat object"
   extends Modelica.Icons.Example;
 
-  OverTimeConstant.MeanBoilerHeat meanBoilerHeat(
+  Components.Control.MeanBoilerHeat
+                                  meanBoilerHeat(
     TimeConstant=2,
     khigh1=1.3,
     khigh2=1.2,
