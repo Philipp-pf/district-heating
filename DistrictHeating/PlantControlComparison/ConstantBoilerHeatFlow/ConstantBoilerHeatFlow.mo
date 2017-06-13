@@ -46,19 +46,28 @@ model ConstantBoilerHeatFlow
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Components.Control.MeanBoilerHeat
                                   meanBoilerHeat(
-    TimeConstant(displayUnit="h") = 86400,
     preYstart=true,
-    khigh1=1.15,
-    khigh2=0.9,
-    klow2=1.1,
-    klow1=0.9,
+    TimeConstant(displayUnit="h") = twentyFourHrs.TimeConstant,
     Tmax=363.15,
+    khigh1=twentyFourHrs.khigh1,
     Thigh=353.15,
+    khigh2=twentyFourHrs.khigh2,
+    Tlow=323.15,
+    klow2=twentyFourHrs.klow2,
     Tmin=313.15,
-    Tlow=323.15) annotation (Placement(transformation(
+    klow1=twentyFourHrs.klow1)
+                 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={0,50})));
+  FourHrs fourHrs
+    annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
+  EightHrs eightHrs
+    annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
+  TwelveHrs twelveHrs
+    annotation (Placement(transformation(extent={{0,80},{20,100}})));
+  TwentyFourHrs twentyFourHrs
+    annotation (Placement(transformation(extent={{40,80},{60,100}})));
 equation
   connect(Store.outside_temp, Outside_Temp_source.y[6])
     annotation (Line(points={{0,-10.4},{0,-19}}, color={0,0,127}));
