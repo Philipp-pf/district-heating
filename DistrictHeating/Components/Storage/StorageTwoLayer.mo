@@ -40,6 +40,11 @@ model StorageTwoLayer
         rotation=90,
         origin={0,-114})));
 
+  Modelica.Blocks.Interfaces.RealOutput y "Height of Boarder Hboard"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={0,106})));
 equation
   V=H*(D*D*pi)/4 "calculation for Store Diameter";
   Vhigh+Vlow=V "Sum of store volume";
@@ -53,7 +58,9 @@ equation
   der(Q)=Qload-Qunload-Qloss "first thermodynamic law";
   port_a.T=port_b.T "equal Temperature at both ports";
   port_a.T=Thigh "temperature of ports";
+
   u=Tout "Input outside temperature";
+  y=Hboard "Output Boarder Height";
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-60,80},{60,-20}},
