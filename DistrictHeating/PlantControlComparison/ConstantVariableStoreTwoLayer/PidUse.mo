@@ -69,7 +69,6 @@ model PidUse
   PiParameter piParameter(k=-606578, Ti=225391)
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
 equation
-PID.u=storageTwoLayer.Hboard;
   connect(PID.y, boilerBasicPeak.nominal_heat) annotation (Line(points={{41,48},
         {50,48},{50,72},{-72,72},{-72,0},{-60.4,0}},   color={0,0,127}));
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
@@ -82,6 +81,8 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
     annotation (Line(points={{40,0},{26,0},{10,0}}, color={191,0,0}));
   connect(Outside_Temp_source.y[6], storageTwoLayer.u) annotation (Line(points={{
           7.21645e-016,-19},{0,-19},{0,-11.4}},            color={0,0,127}));
+  connect(storageTwoLayer.y, PID.u) annotation (Line(points={{0,10.6},{0,10.6},{
+          0,24},{0,48},{18,48}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
