@@ -1,6 +1,5 @@
 within DistrictHeating.Examples.Storage;
 model StorageTwoLayer
-  import StorageTwoLayer;
 
 extends Modelica.Icons.Example;
 
