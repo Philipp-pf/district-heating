@@ -61,6 +61,16 @@ equation
 
   u=Tout "Input outside temperature";
   y=Hboard "Output Boarder Height";
+
+  assert(
+    0 <= Hboard,
+    "Storage is out of upper limit (overloaded)",
+    AssertionLevel.error);
+  assert(
+    H >= Hboard,
+    "Storage is out of lower limit (underloaded)",
+    AssertionLevel.error);
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-60,80},{60,-20}},
