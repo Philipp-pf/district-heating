@@ -2,7 +2,7 @@ within DistrictHeating.Examples.Control;
 model MeanBoilerHeatTwoLayer "Example to show function of control object"
   extends Modelica.Icons.Example;
 
-  ConstantBoilerHeatFlow.MeanBoilerHeatTwoLayer meanBoilerHeatTwoLayer(
+  Components.Control.MeanBoilerHeatTwoLayer     meanBoilerHeatTwoLayer(
     preYstart=false,
     TimeConstant=1,
     Hhighload1=0,

@@ -8,7 +8,7 @@ extends Modelica.Icons.Example;
     offset=2,
     height=18)
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
-  OutsideTempControl.OutsideTempControlContinous outsideTempControlContinous(Table(
+  Components.Control.OutsideTempControl          outsideTempControlContinous(Table(
         displayUnit="W") = [0,2,11,20; 270,1300000,1400000,1500000; 275,1100000,
       1200000,1300000; 280,900000,1000000,1100000])
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
