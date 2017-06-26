@@ -69,18 +69,18 @@ Modelica.SIunits.HeatFlowRate StoreCorrector
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
   Modelica.Blocks.Sources.BooleanConstant booleanConstant(k=false)
     annotation (Placement(transformation(extent={{-72,-90},{-52,-70}})));
-  Modelica.Blocks.MathBoolean.ChangingEdge changing1
-    annotation (Placement(transformation(extent={{-12,-76},{-4,-68}})));
   Modelica.Blocks.MathBoolean.Or or1(nu=2)
     annotation (Placement(transformation(extent={{6,-66},{18,-54}})));
-  Modelica.Blocks.MathBoolean.ChangingEdge changing2
-    annotation (Placement(transformation(extent={{-12,-54},{-4,-46}})));
   Modelica.Blocks.Logical.Timer timer
     annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
   Modelica.Blocks.Logical.GreaterEqualThreshold greaterEqualThreshold(threshold=
        Triggerdelay)
     annotation (Placement(transformation(extent={{-72,-60},{-52,-40}})));
 
+  Modelica.Blocks.MathBoolean.RisingEdge rising1
+    annotation (Placement(transformation(extent={{-12,-54},{-4,-46}})));
+  Modelica.Blocks.MathBoolean.RisingEdge rising2
+    annotation (Placement(transformation(extent={{-12,-80},{-4,-72}})));
 equation
   //Connectors from outside
   u=ConsumerHeatFlow;
@@ -90,7 +90,7 @@ equation
 //Connectors inside
 triggeredSampler.u=EffTable[numb].u;
 timer.u=OuterLimits;
-changing1.u=OuterLimits;
+rising2.u=OuterLimits;
 
 //Definition work area
   MaxHeatFlow=ConsumerHeatFlow+Overproduction;
@@ -151,11 +151,6 @@ changing1.u=OuterLimits;
   connect(logicalSwitch.u3,booleanConstant. y) annotation (Line(points={{-42,-58},
           {-46,-58},{-46,-80},{-51,-80}},
                                      color={255,0,255}));
-  connect(changing2.y,or1. u[1]) annotation (Line(points={{-3.2,-50},{2,-50},{2,
-          -57.9},{6,-57.9}},
-                          color={255,0,255}));
-  connect(changing1.y,or1. u[2]) annotation (Line(points={{-3.2,-72},{2,-72},{2,
-          -62.1},{6,-62.1}},color={255,0,255}));
   connect(timer.y,greaterEqualThreshold. u)
     annotation (Line(points={{-79,-50},{-79,-50},{-74,-50}},
                                                           color={0,0,127}));
@@ -166,9 +161,12 @@ changing1.u=OuterLimits;
           20,-20},{20,-60},{18.9,-60}},          color={255,0,255}));
   connect(booleanPulse.y, logicalSwitch.u1) annotation (Line(points={{-51,-20},{
           -46,-20},{-46,-42},{-42,-42}},color={255,0,255}));
-  connect(logicalSwitch.y, changing2.u)
-    annotation (Line(points={{-19,-50},{-13.6,-50}},
-                                                   color={255,0,255}));
+  connect(or1.u[1], rising1.y) annotation (Line(points={{6,-57.9},{2,-57.9},{2,-50},
+          {-3.2,-50}}, color={255,0,255}));
+  connect(logicalSwitch.y, rising1.u)
+    annotation (Line(points={{-19,-50},{-13.6,-50}}, color={255,0,255}));
+  connect(or1.u[2], rising2.y) annotation (Line(points={{6,-62.1},{2,-62.1},{2,-76},
+          {-3.2,-76}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                                 Rectangle(
         extent={{-100,-100},{100,100}},
