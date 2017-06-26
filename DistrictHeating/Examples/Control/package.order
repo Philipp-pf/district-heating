@@ -3,3 +3,4 @@ PIDControlStorageFilling
 MeanBoilerHeat
 MeanBoilerHeatTwoLayer
 OutsideTempControl
+MaximalEfficiencyControl
