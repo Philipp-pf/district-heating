@@ -2,7 +2,7 @@ within DistrictHeating.PlantControlComparison.ConstantVariableStoreTwoLayer;
 model PidUse
   parameter String fileNameTemperature = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Outsidetemperature_original.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
-  parameter String fileNameNet = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original.txt")
+  parameter String fileNameNetNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
@@ -15,7 +15,7 @@ model PidUse
     tableName="Netzleistung",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameNet)                                       annotation (
+    fileName=fileNameNetNew)                                    annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -72,7 +72,7 @@ equation
   connect(PID.y, boilerBasicPeak.nominal_heat) annotation (Line(points={{41,48},
         {50,48},{50,72},{-72,72},{-72,0},{-60.4,0}},   color={0,0,127}));
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
-  annotation (Line(points={{60.6,0},{70,0},{79,0},{79,0}}, color={0,0,127}));
+  annotation (Line(points={{60.6,0},{70,0},{79,0}},        color={0,0,127}));
   connect(StoreTemp.y, PID.u1) annotation (Line(points={{59,30},{59,30},{30,30},
           {30,36}}, color={0,0,127}));
   connect(boilerBasicPeak.thermal_heat_flow, storageTwoLayer.port_a)

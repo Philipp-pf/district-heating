@@ -5,8 +5,8 @@ model ConstantBoilerHeatFlow
     "File on which data is present" annotation (Dialog(loadSelector(filter=
             "Text files (*.txt)", caption=
             "Open text file to read parameters of the form \"name = value\"")));
-  parameter String fileNameNet=Modelica.Utilities.Files.loadResource(
-      "modelica://DistrictHeating/Resources/Data/Net_original.txt")
+  parameter String fileNameNetNew=Modelica.Utilities.Files.loadResource(
+      "modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation (Dialog(loadSelector(filter=
             "Text files (*.txt)", caption=
             "Open text file to read parameters of the form \"name = value\"")));
@@ -28,7 +28,8 @@ model ConstantBoilerHeatFlow
     tableName="Netzleistung",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameNet) annotation (Placement(transformation(
+    fileName=fileNameNetNew)
+                          annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={90,0})));
@@ -76,7 +77,7 @@ equation
   connect(Store.heat_input, boilerBasicPeak.thermal_heat_flow)
     annotation (Line(points={{-10,0},{-10,0},{-40,0}}, color={191,0,0}));
   connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
-    annotation (Line(points={{60.6,0},{70,0},{79,0},{79,0}}, color={0,0,127}));
+    annotation (Line(points={{60.6,0},{70,0},{79,0}},        color={0,0,127}));
   connect(consumerTimeDependExt.heat_demand, meanBoilerHeat.u) annotation (Line(
         points={{39.4,7},{26,7},{26,50},{11.2,50}}, color={0,0,127}));
   connect(Store.store_temp, meanBoilerHeat.u1)
