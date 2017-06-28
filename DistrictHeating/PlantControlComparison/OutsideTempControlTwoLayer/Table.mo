@@ -28,5 +28,8 @@ model Table
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>Use this table to fill in data of temperature and heat flow.</p>
+<p>Give attention to prefixes of SI units. If using &QUOT;Kilo&QUOT;  for heat flow for instance, you have to fill in &QUOT;Kilo&QUOT; for temperature and boarder heigth also. </p>
+<p>Example: If using 100,000 W then temperature is 287 K and boarder height is 15m.</p>
+<p>If using 100 kW then temperature is 0.287 kK and 0.015 km.</p>
 </html>"));
 end Table;
