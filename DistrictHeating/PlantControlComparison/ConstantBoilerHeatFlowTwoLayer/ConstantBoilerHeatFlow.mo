@@ -43,7 +43,8 @@ Real zero=0 "Zero-line";
   DistrictHeating.Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase(
         displayUnit="kW") = 2200000, Qpeak(displayUnit="kW") = 1500000)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-  MeanBoilerHeatTwoLayer meanBoilerHeat(
+  Components.Control.MeanBoilerHeatTwoLayer
+                         meanBoilerHeat(
     preYstart=true,
     TimeConstant(displayUnit="h") = twelveHrs.TimeConstant,
     Hhighload1=twelveHrs.Hhighload1,
@@ -60,7 +61,7 @@ Real zero=0 "Zero-line";
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={0,50})));
-  StorageTwoLayerNoAssert                            storageTwoLayer(
+  Components.Storage.StorageTwoLayer                 storageTwoLayer(
     V=137,
     H=22,
     rho=water.rho,
@@ -101,7 +102,7 @@ equation
   connect(consumerTimeDependExt.heat_flow, storageTwoLayer.port_b)
     annotation (Line(points={{40,0},{26,0},{10,0}}, color={191,0,0}));
   connect(meanBoilerHeat.u1, storageTwoLayer.y) annotation (Line(points={{
-          -1.33227e-015,39.6},{0,39.6},{0,10.4}},
+          -1.33227e-015,39.6},{0,39.6},{0,10.6}},
                                     color={0,0,127}));
   connect(Outside_Temp_source.y[6], storageTwoLayer.u) annotation (Line(points={
           {7.21645e-016,-19},{0,-19},{0,-11.4}}, color={0,0,127}));
