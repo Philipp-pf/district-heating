@@ -1,14 +1,20 @@
 within DistrictHeating.Examples.Control;
-model MeanBoilerHeatTwoLayer "Example to show function of control object"
+model MeanBoilerHeatTwoLayer
+  "shows function of mean boiler heat flow control unit"
   extends Modelica.Icons.Example;
 
-  Components.Control.MeanBoilerHeatTwoLayer     meanBoilerHeatTwoLayer(
+Modelica.SIunits.Height H=22 "store height for diagramme";
+Real zero=0 "store limit for diagramme";
+
+  Components.Control.MeanBoilerHeatTwoLayer meanBoilerHeatTwoLayer(
     preYstart=false,
     TimeConstant=1,
-    Hhighload1=0,
-    Hhighload2=4.4,
-    Hlowload2=17.6,
-    Hlowload1=22)
+    QStart=0,
+    TStart=0,
+    Hlowload1=20,
+    Hhighload1=2,
+    Hhighload2=6,
+    Hlowload2=16)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Constant ConsumerHeatFlow(k=1)
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
@@ -30,7 +36,8 @@ model MeanBoilerHeatTwoLayer "Example to show function of control object"
     annotation (Placement(transformation(extent={{-50,62},{-30,82}})));
 equation
   connect(meanBoilerHeatTwoLayer.u, ConsumerHeatFlow.y)
-    annotation (Line(points={{-11.2,0},{-16,0},{-19,0}}, color={0,0,127}));
+    annotation (Line(points={{-11.2,0},{-11.2,0},{-19,0}},
+                                                         color={0,0,127}));
   connect(meanBoilerHeatTwoLayer.u1, Boarderheight.y)
     annotation (Line(points={{0,10.4},{0,10.4},{0,27}}, color={0,0,127}));
   annotation (
