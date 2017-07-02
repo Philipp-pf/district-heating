@@ -4,7 +4,8 @@ model StorageTwoLayer
 extends Modelica.Icons.Example;
 
   DistrictHeating.Components.Boiler.BoilerInFinite boilerInFinite(limited_heat=false,
-      Qmax=1)
+    Qmax=1,
+    TimeFirstOrder=0)
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
     consumerTimeDependExt

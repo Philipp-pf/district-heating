@@ -53,8 +53,11 @@ model OutTempUse
     Tlow=313.15,
     Tref=313.15)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase=4000000, Qpeak=
-        1000000)
+  Components.Boiler.BoilerBasicPeak boilerBasicPeak(
+    Qbase=4000000,
+    Qpeak=1000000,
+    TimeFirstOrderBase=0,
+    TimeFirstOrderPeak=0)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 equation
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])

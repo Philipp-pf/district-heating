@@ -3,7 +3,11 @@ model BoilerBasicPeak
 
   extends Modelica.Icons.Example;
 
-  Components.Boiler.BoilerBasicPeak boilerInFinite(Qbase=1000, Qpeak=500)
+  Components.Boiler.BoilerBasicPeak boilerInFinite(
+    Qbase=1000,
+    Qpeak=500,
+    TimeFirstOrderBase=0,
+    TimeFirstOrderPeak=0)
     annotation (Placement(transformation(extent={{-36,-10},{-16,10}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensor
     annotation (Placement(transformation(

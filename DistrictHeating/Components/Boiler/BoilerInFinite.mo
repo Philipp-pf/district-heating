@@ -8,10 +8,13 @@ parameter Boolean limited_heat=false "Use limited heat flow of the boiler";
 parameter Modelica.SIunits.HeatFlowRate Qmax=1000
     "maximal thermal heat flow rate of the boiler"
 annotation (Dialog(enable= limited_heat));
+parameter Modelica.SIunits.Time TimeFirstOrder=0
+    "time constant of first order object";
+
 Modelica.SIunits.HeatFlowRate HeatFlowRate;
 Modelica.SIunits.Heat Heat;
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow
-    annotation (Placement(transformation(extent={{-4,-10},{16,10}})));
+    annotation (Placement(transformation(extent={{30,-10},{50,10}})));
   Modelica.Blocks.Interfaces.RealInput nominal_heat
     "specification of the heat flow"
     annotation (Placement(transformation(extent={{-124,-20},{-84,20}})));
@@ -22,39 +25,47 @@ Modelica.SIunits.Heat Heat;
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={50,-36})));
+        origin={70,-36})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensor
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={50,0})));
+        origin={70,0})));
   Modelica.Blocks.Nonlinear.Limiter limiter(             uMin=0, uMax=Qmax)
     annotation (Placement(transformation(extent={{-72,34},{-52,54}})));
   Modelica.Blocks.Logical.Switch switch
     annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
   Modelica.Blocks.Sources.BooleanConstant limitedHeat(k=limited_heat)
     annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(
+    k=1,
+    initType=Modelica.Blocks.Types.Init.InitialState,
+    y_start=0,
+    T=TimeFirstOrder)
+    annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 equation
 
   HeatFlowRate=heatFlowSensor.Q_flow;
 Heat=heat_counter.y;
 
   connect(prescribedHeatFlow.port, heatFlowSensor.port_a)
-    annotation (Line(points={{16,0},{16,0},{40,0}}, color={191,0,0}));
+    annotation (Line(points={{50,0},{50,0},{60,0}}, color={191,0,0}));
   connect(thermal_heat_flow, heatFlowSensor.port_b)
-    annotation (Line(points={{100,0},{80,0},{60,0}}, color={191,0,0}));
-  connect(prescribedHeatFlow.Q_flow, switch.y)
-    annotation (Line(points={{-4,0},{-8,0},{-13,0}}, color={0,0,127}));
+    annotation (Line(points={{100,0},{80,0}},        color={191,0,0}));
   connect(nominal_heat, limiter.u) annotation (Line(points={{-104,0},{-104,0},{-80,
           0},{-80,44},{-74,44}}, color={0,0,127}));
   connect(heatFlowSensor.Q_flow, heat_counter.u)
-    annotation (Line(points={{50,-10},{50,-24},{50,-24}}, color={0,0,127}));
+    annotation (Line(points={{70,-10},{70,-24}},          color={0,0,127}));
   connect(limiter.y, switch.u1) annotation (Line(points={{-51,44},{-46,44},{-46,
           8},{-36,8}}, color={0,0,127}));
   connect(switch.u2, limitedHeat.y)
     annotation (Line(points={{-36,0},{-44,0},{-51,0}}, color={255,0,255}));
   connect(switch.u3, limiter.u) annotation (Line(points={{-36,-8},{-46,-8},{-46,
           -24},{-80,-24},{-80,44},{-74,44}}, color={0,0,127}));
+  connect(prescribedHeatFlow.Q_flow, firstOrder.y)
+    annotation (Line(points={{30,0},{26,0},{21,0}}, color={0,0,127}));
+  connect(switch.y, firstOrder.u)
+    annotation (Line(points={{-13,0},{-2,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,100},{100,-100}},
@@ -104,5 +115,6 @@ Heat=heat_counter.y;
 <p>If the Boolean parameter limited_heat is false, the boiler has infinite heat flow. </p>
 <p>If the Boolean parameter limited_heat is true, the boiler has a maximal heat flow. Higher nominal inputs are limited at maximal heat flow. </p>
 <p>Additionally the model has a counter for the heat flow (integrator). </p>
+<p>The use of parameter <code>TimeFirstOrder </code>allows a first order behavior of the boiler. </p>
 </html>"));
 end BoilerInFinite;

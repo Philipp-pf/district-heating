@@ -21,8 +21,9 @@ model BoilerInFinite
     offset=0,
     startTime=1)
     annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
-  Components.Boiler.BoilerInFinite boilerInFinite(limited_heat=true, Qmax=
-       1000)
+  Components.Boiler.BoilerInFinite boilerInFinite(limited_heat=true,
+    TimeFirstOrder=0,
+    Qmax=1000)
     annotation (Placement(transformation(extent={{-44,-10},{-24,10}})));
 equation
   connect(heatFlowSensor.Q_flow, feedback.u2) annotation (Line(points={{2,-10},

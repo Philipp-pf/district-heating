@@ -43,7 +43,9 @@ model ConstantBoilerHeatFlow
         rotation=90,
         origin={0,-30})));
   DistrictHeating.Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase(
-        displayUnit="kW") = 2200000, Qpeak(displayUnit="kW") = 800000)
+        displayUnit="kW") = 2200000, Qpeak(displayUnit="kW") = 800000,
+    TimeFirstOrderBase=0,
+    TimeFirstOrderPeak=0)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Components.Control.MeanBoilerHeat
                                   meanBoilerHeat(

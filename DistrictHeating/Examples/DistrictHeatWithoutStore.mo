@@ -14,7 +14,11 @@ model DistrictHeatWithoutStore
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,-56})));
-  Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase=1500, Qpeak=500)
+  Components.Boiler.BoilerBasicPeak boilerBasicPeak(
+    Qbase=1500,
+    Qpeak=500,
+    TimeFirstOrderBase=0,
+    TimeFirstOrderPeak=0)
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 equation
   connect(heatFlowSensor.port_a, fixedTemperature.port)

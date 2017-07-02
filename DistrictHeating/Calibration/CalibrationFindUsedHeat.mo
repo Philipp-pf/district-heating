@@ -54,13 +54,16 @@ model CalibrationFindUsedHeat
         water.cp, Tref=285)
     annotation (Placement(transformation(extent={{-38,60},{-18,80}})));
   Components.Boiler.BoilerInFinite                 Straw(limited_heat=false,
-      Qmax=2300000)
+    Qmax=2300000,
+    TimeFirstOrder=0)
     annotation (Placement(transformation(extent={{-72,20},{-52,40}})));
   Components.Boiler.BoilerInFinite                 Wood(limited_heat=false,
-      Qmax=1600000)
+    Qmax=1600000,
+    TimeFirstOrder=0)
     annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));
-  Components.Boiler.BoilerInFinite                 Oil(limited_heat=false, Qmax=
-       1300000)
+  Components.Boiler.BoilerInFinite                 Oil(limited_heat=false,
+    TimeFirstOrder=0,
+    Qmax=1300000)
     annotation (Placement(transformation(extent={{-72,-40},{-52,-20}})));
   Modelica.Blocks.Sources.CombiTimeTable Oil_source(
     tableOnFile=true,

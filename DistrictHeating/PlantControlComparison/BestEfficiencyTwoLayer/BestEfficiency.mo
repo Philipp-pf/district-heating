@@ -43,8 +43,11 @@ model BestEfficiency "Shows the work best efficiency control unit"
     Tlow=313.15,
     Tref=313.15)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase=4000000, Qpeak=
-        1000000)
+  Components.Boiler.BoilerBasicPeak boilerBasicPeak(
+    Qbase=4000000,
+    Qpeak=1000000,
+    TimeFirstOrderBase=0,
+    TimeFirstOrderPeak=0)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Components.Control.MaximalEfficiencyControl maximalEfficiencyControl(
     OuterLimits(start=false, fixed=true),
@@ -79,8 +82,8 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
     annotation (Line(points={{-10,0},{-40,0}}, color={191,0,0}));
   connect(consumerTimeDependExt.heat_demand, maximalEfficiencyControl.u)
     annotation (Line(points={{39.4,7},{28,7},{28,50},{11.2,50}}, color={0,0,127}));
-  connect(maximalEfficiencyControl.y, boilerBasicPeak.nominal_heat) annotation
-    (Line(points={{-10.8,50},{-20,50},{-80,50},{-80,0},{-60.4,0}}, color={0,0,
+  connect(maximalEfficiencyControl.y, boilerBasicPeak.nominal_heat) annotation (
+     Line(points={{-10.8,50},{-20,50},{-80,50},{-80,0},{-60.4,0}}, color={0,0,
           127}));
   connect(storageTwoLayer.y, maximalEfficiencyControl.u1)
     annotation (Line(points={{0,10.6},{0,39.4}}, color={0,0,127}));
