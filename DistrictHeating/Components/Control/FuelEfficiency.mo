@@ -1,11 +1,14 @@
 within DistrictHeating.Components.Control;
-model FuelEfficiency
+model FuelEfficiency "defines fuel heat flow"
 
-    parameter Real EfficiencyTable[:,2]
-    "Dependency between heat flow and fuel efficiency";
-     parameter Modelica.SIunits.HeatFlowRate AllowedGap
+        parameter Modelica.SIunits.HeatFlowRate AllowedGap
     "Allowed Difference of actual boiler heat flow and target boiler heat flow that dont reduces efficiency";
     parameter Real etaMin( min=0.001,max=1) "minimal efficiency of the boiler";
+    parameter Boolean useExternalFile=false "=true, if external file is used" annotation(Dialog(group="External efficiency file"));
+ parameter Real EfficiencyTable[:,2]
+    "Dependency between heat flow and fuel efficiency" annotation (Dialog(group="External efficiency file", enable= not useExternalFile));
+parameter String fileName="fileName" "File on which data is present"                                        annotation(Dialog(group="External efficiency file", enable= useExternalFile,loadSelector(filter = "Text files (*.txt)", caption = "Choose Text File with Consumer Heat Demand")));
+  parameter String tableName="tableName" "Table Name in the file" annotation (Dialog(group="External efficiency file", enable= useExternalFile));
 
   Real Efficiency=max1.y "Efficiency";
    Modelica.SIunits.HeatFlowRate ActualBoilerHeatFlow=u
@@ -37,9 +40,11 @@ model FuelEfficiency
   Modelica.Blocks.Interfaces.RealOutput y "Fuel heat flow"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(
-    tableOnFile=false,
     table=EfficiencyTable,
-    smoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative)
+    smoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative,
+    tableOnFile=useExternalFile,
+    tableName=tableName,
+    fileName=fileName)
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
   Modelica.Blocks.Math.Abs abs1
     annotation (Placement(transformation(extent={{-62,-10},{-42,10}})));
@@ -90,7 +95,7 @@ product.u2=0;
   connect(switch.u3, product.y)
     annotation (Line(points={{-2,54},{-11,54}}, color={0,0,127}));
   connect(product.u1, combiTable1Ds.y[1])
-    annotation (Line(points={{-34,60},{-59,60},{-59,60}}, color={0,0,127}));
+    annotation (Line(points={{-34,60},{-59,60}},          color={0,0,127}));
   connect(switch.u1, combiTable1Ds.y[1]) annotation (Line(points={{-2,70},{-48,
           70},{-48,60},{-59,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

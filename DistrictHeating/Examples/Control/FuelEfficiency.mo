@@ -12,7 +12,8 @@ model FuelEfficiency "shows work of efficiency component"
                             fuelEfficiency(
     EfficiencyTable=effTable.DataTable,
     etaMin=0.1,
-    AllowedGap=1000)
+    AllowedGap=1000,
+    useExternalFile=false)
     annotation (Placement(transformation(extent={{22,-10},{42,10}})));
   DistrictHeating.PlantControlComparison.BestEfficiencyTwoLayer.Table
         effTable(DataTable(displayUnit="W") = [Modelica.Constants.eps,Modelica.Constants.eps; 500000,0.12;
