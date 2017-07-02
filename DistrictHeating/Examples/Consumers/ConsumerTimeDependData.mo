@@ -1,6 +1,8 @@
 within DistrictHeating.Examples.Consumers;
 model ConsumerTimeDependData
   extends Modelica.Icons.Example;
+  parameter String fileNameExample = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Straw_example1.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=
         273.15)
     annotation (Placement(transformation(extent={{-32,-10},{-12,10}})));
