@@ -2,6 +2,8 @@ within DistrictHeating.Examples.Control;
 model MaximalEfficiencyControl "shows function of efficiency control"
 
 extends Modelica.Icons.Example;
+  parameter String fileNameEff = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   Components.Control.MaximalEfficiencyControl maximalEfficiencyControl(
     HHighload=2,
     HLowload=20,
@@ -12,10 +14,13 @@ extends Modelica.Icons.Example;
     Triggerdelay(displayUnit="s") = 1,
     Triggerperiod(displayUnit="s") = 1,
     m=5,
+    useExternalFile=true,
+    tableName="Efficiency",
     Overproduction=50000,
     Underproduction=50000,
     QHighload=50000,
-    QLowload=50000)
+    QLowload=50000,
+    fileName=fileNameEff)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.TimeTable timeTable(
     offset=0,

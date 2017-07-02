@@ -1,8 +1,6 @@
 within DistrictHeating.Components.Control;
 model MaximalEfficiencyControl "Work in maximal efficiency boiler heat flow"
 
-parameter Real EfficiencyTable[:,2] "Table which shows the efficiency of the boiler, left column 
-contains boiler heat flow, right column contains boiler efficiency";
 parameter Integer m(min=1)
     "Number of steps as sampling rate within toleranceband(boiler heat flow step height=1/m)";
 parameter Modelica.SIunits.HeatFlowRate Overproduction
@@ -17,13 +15,18 @@ parameter Modelica.SIunits.HeatFlowRate Underproduction
     parameter Modelica.SIunits.HeatFlowRate QLowload(  min=0)
     "heat flow surplus to avoid underloaded store" annotation (Dialog(group="Store"));
     parameter Modelica.SIunits.Height H "total storage height" annotation (Dialog(group="Store"));
-    parameter Modelica.SIunits.HeatFlowRate Qstart
-    "start value of boiler heat flow" annotation (Dialog(group="Initialization"));
 parameter Modelica.SIunits.Time Triggerdelay
     "if boiler heat flow is out of limit, wait time before boiler heat flow is reseted"
-                                                                                        annotation (Dialog(group="Trigger"));
+                                                                                 annotation (Dialog(group="Trigger"));
     parameter Modelica.SIunits.Time Triggerperiod
     "Time between boiler heat reset if out of limit (after triggerdelay)" annotation (Dialog(group="Trigger"));
+parameter Boolean useExternalFile=false "=true, if external file is used" annotation(Dialog(group="External efficiency file"));
+parameter Real EfficiencyTable[:,2] "Table which shows the efficiency of the boiler, left column 
+contains boiler heat flow, right column contains boiler efficiency" annotation(Dialog(enable= not useExternalFile, group="External efficiency file"));
+ parameter String fileName="fileName" "File on which data is present"                                        annotation(Dialog(group="External efficiency file", enable= useExternalFile,loadSelector(filter = "Text files (*.txt)", caption = "Choose Text File with Consumer Heat Demand")));
+  parameter String tableName="tableName" "Table Name in the file" annotation (Dialog(group="External efficiency file", enable= useExternalFile));
+        parameter Modelica.SIunits.HeatFlowRate Qstart
+    "start value of boiler heat flow" annotation (Dialog(group="Initialization"));
 
 Modelica.SIunits.HeatFlowRate ConsumerHeatFlow "input consumer heat flow";
 Modelica.SIunits.HeatFlowRate MaxHeatFlow "maximal allowed heat flow";
@@ -42,9 +45,11 @@ Modelica.SIunits.HeatFlowRate StoreCorrector
   Modelica.Blocks.Interfaces.RealInput u "consumer heat flow"
     annotation (Placement(transformation(extent={{-132,-20},{-92,20}})));
   Modelica.Blocks.Tables.CombiTable1Ds EffTable[m](
-    tableOnFile=fill(false, m),
     table=fill(EfficiencyTable, m),
-    smoothness=fill(Modelica.Blocks.Types.Smoothness.LinearSegments, m))
+    smoothness=fill(Modelica.Blocks.Types.Smoothness.LinearSegments, m),
+    tableOnFile=fill(useExternalFile, m),
+    tableName=fill(tableName, m),
+    fileName=fill(fileName, m))
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
   Modelica.Blocks.Interfaces.RealOutput y
