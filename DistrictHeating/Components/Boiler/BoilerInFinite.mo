@@ -8,7 +8,7 @@ parameter Boolean limited_heat=false "Use limited heat flow of the boiler";
 parameter Modelica.SIunits.HeatFlowRate Qmax=1000
     "maximal thermal heat flow rate of the boiler"
 annotation (Dialog(enable= limited_heat));
-parameter Modelica.SIunits.Time TimeFirstOrder=0
+parameter Modelica.SIunits.Time TimeFirstOrder=0.001
     "time constant of first order object";
 
 Modelica.SIunits.HeatFlowRate HeatFlowRate;

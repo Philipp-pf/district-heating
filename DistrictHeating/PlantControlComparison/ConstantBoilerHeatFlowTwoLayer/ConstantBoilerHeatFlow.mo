@@ -42,23 +42,23 @@ Real zero=0 "Zero-line";
         origin={0,-30})));
   DistrictHeating.Components.Boiler.BoilerBasicPeak boilerBasicPeak(Qbase(
         displayUnit="kW") = 2200000, Qpeak(displayUnit="kW") = 1500000,
-    TimeFirstOrderBase=0,
-    TimeFirstOrderPeak=0)
+    TimeFirstOrderBase=0.001,
+    TimeFirstOrderPeak=0.001)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Components.Control.MeanBoilerHeatTwoLayer
                          meanBoilerHeat(
     preYstart=true,
-    TimeConstant(displayUnit="h") = twelveHrs.TimeConstant,
-    Hhighload1=twelveHrs.Hhighload1,
-    khigh1=twelveHrs.khigh1,
-    Hhighload2=twelveHrs.Hhighload2,
-    khigh2=twelveHrs.khigh2,
-    Hlowload2=twelveHrs.Hlowload2,
-    klow2=twelveHrs.klow2,
-    Hlowload1=twelveHrs.Hlowload1,
-    klow1=twelveHrs.klow1,
-    QStart=twelveHrs.QStart,
-    TStart=twelveHrs.TStart)
+    TimeConstant(displayUnit="h") = fourHrs.TimeConstant,
+    Hhighload1=fourHrs.Hhighload1,
+    khigh1=fourHrs.khigh1,
+    Hhighload2=fourHrs.Hhighload2,
+    khigh2=fourHrs.khigh2,
+    Hlowload2=fourHrs.Hlowload2,
+    klow2=fourHrs.klow2,
+    Hlowload1=fourHrs.Hlowload1,
+    klow1=fourHrs.klow1,
+    QStart=fourHrs.QStart,
+    TStart=fourHrs.TStart)
                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,

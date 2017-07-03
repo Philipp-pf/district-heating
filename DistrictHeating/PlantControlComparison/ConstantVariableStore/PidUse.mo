@@ -40,8 +40,8 @@ model PidUse
   DistrictHeating.Components.Boiler.BoilerBasicPeak boilerBasicPeak(
                                      Qpeak(displayUnit="kW") = 1000000, Qbase(
       displayUnit="kW") = 2500000,
-    TimeFirstOrderBase=0,
-    TimeFirstOrderPeak=0)
+    TimeFirstOrderBase=0.001,
+    TimeFirstOrderPeak=0.001)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   DistrictHeating.Components.Control.PIDControlStorageFilling
                               PID(

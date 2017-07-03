@@ -6,8 +6,8 @@ model BoilerBasicPeak
   Components.Boiler.BoilerBasicPeak boilerInFinite(
     Qbase=1000,
     Qpeak=500,
-    TimeFirstOrderBase=0,
-    TimeFirstOrderPeak=0)
+    TimeFirstOrderBase=0.001,
+    TimeFirstOrderPeak=0.001)
     annotation (Placement(transformation(extent={{-36,-10},{-16,10}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensor
     annotation (Placement(transformation(

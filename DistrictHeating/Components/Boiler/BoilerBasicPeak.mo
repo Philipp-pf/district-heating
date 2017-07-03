@@ -4,9 +4,9 @@ model BoilerBasicPeak "Boiler which divides into basic and peak load"
 
 parameter Modelica.SIunits.HeatFlowRate Qbase "maximal basic load power";
 parameter Modelica.SIunits.HeatFlowRate Qpeak "maximal peak load power";
-parameter Modelica.SIunits.Time TimeFirstOrderBase=0
+parameter Modelica.SIunits.Time TimeFirstOrderBase=0.001
     "time constant of base load boiler first order object";
-parameter Modelica.SIunits.Time TimeFirstOrderPeak=0
+parameter Modelica.SIunits.Time TimeFirstOrderPeak=0.001
     "time constant of peak load boiler first order object";
 Modelica.SIunits.HeatFlowRate HeatFlowBase;
 Modelica.SIunits.HeatFlowRate HeatFlowPeak;

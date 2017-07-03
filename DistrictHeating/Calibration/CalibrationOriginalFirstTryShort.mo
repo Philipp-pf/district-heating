@@ -18,15 +18,15 @@ extends Modelica.Icons.Example;
 
   DistrictHeating.Components.Boiler.BoilerInFinite Straw(limited_heat=false,
     Qmax=2300000,
-    TimeFirstOrder=0)
+    TimeFirstOrder=0.001)
     annotation (Placement(transformation(extent={{-72,20},{-52,40}})));
   DistrictHeating.Components.Boiler.BoilerInFinite Wood(limited_heat=false,
     Qmax=1600000,
-    TimeFirstOrder=0)
+    TimeFirstOrder=0.001)
     annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));
   DistrictHeating.Components.Boiler.BoilerInFinite Oil(limited_heat=false,
     Qmax=1300000,
-    TimeFirstOrder=0)
+    TimeFirstOrder=0.001)
     annotation (Placement(transformation(extent={{-72,-40},{-52,-20}})));
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
     consumerTimeDependExt
