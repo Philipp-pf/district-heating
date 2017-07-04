@@ -14,9 +14,10 @@ model DivisorCompare
   Components.Control.HeatFlowDivisor heatFlowDivisor(
     WaitingTime(displayUnit="h") = 43200,
     ActivateBaseBoiler=713000,
-    ActivateBothBoiler=1889000.0,
-    DeactivateBothBoiler=2310000.0,
-    DeactivateBaseBoiler=711000.0,
+    ActivateBothBoiler=1889000,
+    DeactivateBothBoiler=2310000,
+    DeactivateBaseBoiler=711000,
+    BaseHeatFlowBoth=1500000,
     MaxBaseLoad=2600000,
     MaxPeakLoad=500000)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
