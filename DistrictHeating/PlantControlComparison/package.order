@@ -4,3 +4,4 @@ ConstantBoilerHeatFlow
 OutsideTempControlTwoLayer
 BestEfficiencyTwoLayer
 ConstantBoilerHeatFlowTwoLayer
+DivisorCompare

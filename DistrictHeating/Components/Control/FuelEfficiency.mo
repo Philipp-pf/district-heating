@@ -82,8 +82,8 @@ product.u2=0;
                                                              color={0,0,127}));
   connect(y, division.y)
     annotation (Line(points={{110,0},{89,0}}, color={0,0,127}));
-  connect(division.u1, combiTable1Ds.u) annotation (Line(points={{66,6},{60,6},
-          {60,92},{-92,92},{-92,60},{-82,60}},color={0,0,127}));
+  connect(division.u1, combiTable1Ds.u) annotation (Line(points={{66,6},{58,6},
+          {58,92},{-94,92},{-94,60},{-82,60}},color={0,0,127}));
   connect(switch.y, max1.u1)
     annotation (Line(points={{21,62},{26,62},{26,0},{30,0}}, color={0,0,127}));
   connect(division.u2, max1.y)
