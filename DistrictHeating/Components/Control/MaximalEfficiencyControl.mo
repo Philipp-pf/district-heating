@@ -178,7 +178,7 @@ rising2.u=OuterLimits;
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid), Text(
-        extent={{-150,150},{150,110}},
+        extent={{-146,-100},{154,-140}},
         textString="%name",
         lineColor={0,0,255}),
         Line(points={{-72,76},{-72,-64},{78,-64}}, color={28,108,200}),
