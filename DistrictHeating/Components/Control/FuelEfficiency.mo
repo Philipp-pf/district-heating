@@ -58,13 +58,17 @@ parameter String fileName="fileName" "File on which data is present"            
   Modelica.Blocks.Sources.Constant const(k=etaMin)
     annotation (Placement(transformation(extent={{0,-22},{20,-2}})));
 equation
+if ActualBoilerHeatFlow<=0 or TargetBoilerHeatFlow<=0 then
+  product.u2=1;
+else
   if ActualBoilerHeatFlow>=TargetBoilerHeatFlow then
     product.u2=TargetBoilerHeatFlow/ActualBoilerHeatFlow;
   elseif ActualBoilerHeatFlow<TargetBoilerHeatFlow then
     product.u2=ActualBoilerHeatFlow/TargetBoilerHeatFlow;
-else
-product.u2=0;
+  else
+    product.u2=0;
   end if;
+end if;
 
   connect(switch.u2, lessEqualThreshold.y)
     annotation (Line(points={{-2,62},{-8,62},{-8,0},{-11,0}},
@@ -82,8 +86,8 @@ product.u2=0;
                                                              color={0,0,127}));
   connect(y, division.y)
     annotation (Line(points={{110,0},{89,0}}, color={0,0,127}));
-  connect(division.u1, combiTable1Ds.u) annotation (Line(points={{66,6},{58,6},
-          {58,92},{-94,92},{-94,60},{-82,60}},color={0,0,127}));
+  connect(division.u1, combiTable1Ds.u) annotation (Line(points={{66,6},{58,6},{
+          58,92},{-94,92},{-94,60},{-82,60}}, color={0,0,127}));
   connect(switch.y, max1.u1)
     annotation (Line(points={{21,62},{26,62},{26,0},{30,0}}, color={0,0,127}));
   connect(division.u2, max1.y)
@@ -112,8 +116,13 @@ product.u2=0;
         Line(points={{-62,-40},{-58,-32},{-54,-24},{-46,-14},{-32,-2},{-16,8},{6,
               16},{10,16},{24,18},{40,18},{48,14},{58,6},{64,-2}}, color={28,108,
               200}),
-        Line(points={{22,-64},{22,18},{-72,18}}, color={28,108,200})}),
-                                                                 Diagram(
+        Line(points={{22,-64},{22,18},{-72,18}}, color={28,108,200}),
+        Text(
+          extent={{-74,-108},{82,-136}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          textString="%name")}),                                 Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>This object turns the actual heat flow of a boiler into the needed fuel heat flow dependent to the efficiency of the boiler.</p>
