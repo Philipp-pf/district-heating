@@ -4,6 +4,10 @@ model OutTempUse
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   parameter String fileNameNetNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameEffWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Wood.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+ parameter String fileNameEffStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Straw.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
 
@@ -79,18 +83,23 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensorStraw
     annotation (Placement(transformation(extent={{-22,-60},{-2,-40}})));
   Components.Control.FuelEfficiency fuelEfficiencyWood(
-    etaMin=0.2,
-    useExternalFile=false,
     EfficiencyTable=effTable.DataTable,
-    AllowedGap=1000) annotation (Placement(transformation(
+    useExternalFile=true,
+    fileName=fileNameEffWood,
+    tableName="Efficiency",
+    AllowedGap=1000,
+    etaMin=0.59)     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,44})));
   Components.Control.FuelEfficiency fuelEfficiencyStraw(
-    etaMin=0.2,
-    useExternalFile=false,
     EfficiencyTable=effTable.DataTable,
-    AllowedGap=1000) annotation (Placement(transformation(
+    AllowedGap=1000,
+    etaMin=0.57,
+    useExternalFile=true,
+    fileName=fileNameEffStraw,
+    tableName="Efficiency")
+                     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,-20})));

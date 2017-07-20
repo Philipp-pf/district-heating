@@ -4,6 +4,10 @@ model PidUse
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   parameter String fileNameNetNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameEffWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Wood.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+ parameter String fileNameEffStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Straw.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
@@ -40,11 +44,11 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     xd_start=0,
     DelayTime=0,
   useExternVariable=false,
-    Target_Store_Fill=17,
     k=pidParameter.k,
     Ti(displayUnit="h") = pidParameter.Ti,
     Td=pidParameter.Td,
-    Nd=pidParameter.Nd)
+    Nd=pidParameter.Nd,
+    Target_Store_Fill=15)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=180,
         origin={30,60})));
@@ -57,10 +61,10 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     cp=water.cp,
     D(start=2),
     U=13,
-    Hboard(start=17, fixed=true),
     Thigh=363.15,
     Tlow=313.15,
-    Tref=313.15)
+    Tref=313.15,
+    Hboard(start=15, fixed=true))
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   ConstantVariableStoreTwoLayer.PiParameter piParameter(k=-606578, Ti=225391)
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
@@ -88,27 +92,37 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     annotation (Placement(transformation(extent={{-22,4},{-2,24}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensorStraw
     annotation (Placement(transformation(extent={{-22,-60},{-2,-40}})));
-  BestEfficiencyTwoLayer.Table
-        effTable(DataTable(displayUnit="W") = [Modelica.Constants.eps,Modelica.Constants.eps; 500000,0.12;
-        1000000,0.25; 2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8; 3600000,
-        0.81; 3800000,0.75; 4000000,0.7; 4200000,0.65])
-    annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Components.Control.FuelEfficiency fuelEfficiencyWood(
-    etaMin=0.2,
-    useExternalFile=false,
+    useExternalFile=true,
+    fileName=fileNameEffWood,
+    tableName="Efficiency",
+    etaMin=0.59,
     EfficiencyTable=effTable.DataTable,
     AllowedGap=1000) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,44})));
   Components.Control.FuelEfficiency fuelEfficiencyStraw(
-    etaMin=0.2,
-    useExternalFile=false,
-    EfficiencyTable=effTable.DataTable,
-    AllowedGap=1000) annotation (Placement(transformation(
+    useExternalFile=true,
+    tableName="Efficiency",
+    fileName=fileNameEffStraw,
+    etaMin=0.57,
+    AllowedGap=1000,
+    EfficiencyTable=effTable.DataTable)
+                     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-40,-20})));
+        origin={-40,-18})));
+  BestEfficiencyTwoLayer.Table
+        effTable(DataTable(displayUnit="W") = [Modelica.Constants.eps,Modelica.Constants.eps; 500000,0.12;
+        1000000,0.25; 2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8; 3600000,
+        0.81; 3800000,0.75; 4000000,0.7; 4200000,0.65])
+    annotation (Placement(transformation(extent={{60,40},{80,60}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=Modelica.Constants.inf, uMin=0)
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-70,60})));
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
@@ -126,9 +140,6 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
       Line(points={{-90,-26},{-94,-26},{-94,-42},{-94,-80},{44,-80},{44,7},{49.4,
           7}},
         color={0,0,127}));
-  connect(PID.y, heatFlowDivisor.u1) annotation (Line(points={{19,60},{-94,60},{
-          -94,-14},{-90,-14}},
-                            color={0,0,127}));
   connect(storageTwoLayer.y, PID.u) annotation (Line(points={{30,10.6},{30,20},{
           50,20},{50,60},{42,60}},
                                 color={0,0,127}));
@@ -146,9 +157,13 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
   connect(fuelEfficiencyWood.u, Wood.nominal_heat) annotation (Line(points={{-46,
           32},{-46,28},{-60,28},{-60,14},{-56.4,14}}, color={0,0,127}));
   connect(heatFlowSensorStraw.Q_flow,fuelEfficiencyStraw. u1) annotation (Line(
-        points={{-12,-60},{-12,-60},{-12,-68},{-34,-68},{-34,-32}}, color={0,0,127}));
-  connect(fuelEfficiencyStraw.u, Straw.nominal_heat) annotation (Line(points={{-46,
-          -32},{-46,-36},{-60,-36},{-60,-50},{-56.4,-50}}, color={0,0,127}));
+        points={{-12,-60},{-12,-60},{-12,-68},{-34,-68},{-34,-30}}, color={0,0,127}));
+  connect(fuelEfficiencyStraw.u, Straw.nominal_heat) annotation (Line(points={{-46,-30},
+          {-46,-36},{-60,-36},{-60,-50},{-56.4,-50}},      color={0,0,127}));
+  connect(limiter.u, PID.y)
+    annotation (Line(points={{-58,60},{19,60}}, color={0,0,127}));
+  connect(limiter.y, heatFlowDivisor.u1) annotation (Line(points={{-81,60},{-94,
+          60},{-94,-14},{-90,-14}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

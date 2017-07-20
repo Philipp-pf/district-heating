@@ -10,6 +10,10 @@ model ConstantBoilerHeatFlowUse
     "File on which data is present" annotation (Dialog(loadSelector(filter=
             "Text files (*.txt)", caption=
             "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameEffWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Wood.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+ parameter String fileNameEffStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Straw.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
@@ -42,17 +46,17 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Components.Control.MeanBoilerHeatTwoLayer
                          meanBoilerHeat(
     preYstart=true,
-    TimeConstant(displayUnit="h") = fourHrs.TimeConstant,
-    Hhighload1=fourHrs.Hhighload1,
-    khigh1=fourHrs.khigh1,
-    Hhighload2=fourHrs.Hhighload2,
-    khigh2=fourHrs.khigh2,
-    Hlowload2=fourHrs.Hlowload2,
-    klow2=fourHrs.klow2,
-    Hlowload1=fourHrs.Hlowload1,
-    klow1=fourHrs.klow1,
-    QStart=fourHrs.QStart,
-    TStart=fourHrs.TStart)
+    TimeConstant(displayUnit="h") = twentyFourHrs.TimeConstant,
+    Hhighload1=twentyFourHrs.Hhighload1,
+    khigh1=twentyFourHrs.khigh1,
+    Hhighload2=twentyFourHrs.Hhighload2,
+    khigh2=twentyFourHrs.khigh2,
+    Hlowload2=twentyFourHrs.Hlowload2,
+    klow2=twentyFourHrs.klow2,
+    Hlowload1=twentyFourHrs.Hlowload1,
+    klow1=twentyFourHrs.klow1,
+    QStart=twentyFourHrs.QStart,
+    TStart=twentyFourHrs.TStart)
                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -68,14 +72,15 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     Tref=313.15,
     Hboard(start=5.0, fixed=true))
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  ConstantBoilerHeatFlowTwoLayer.FourHrs fourHrs
+  ConstantBoilerHeatFlowTwoLayer.FourHrs fourHrs(klow1=0.84)
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
-  ConstantBoilerHeatFlowTwoLayer.EightHrs eightHrs
+  ConstantBoilerHeatFlowTwoLayer.EightHrs eightHrs(
+    khigh1=1.32,
+    khigh2=1.45,
+    klow1=0.73)
     annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
-  ConstantBoilerHeatFlowTwoLayer.TwelveHrs twelveHrs
+  ConstantBoilerHeatFlowTwoLayer.TwelveHrs twelveHrs(khigh1=1.41, klow1=0.99)
     annotation (Placement(transformation(extent={{0,80},{20,100}})));
-  ConstantBoilerHeatFlowTwoLayer.TwentyFourHrs twentyFourHrs
-    annotation (Placement(transformation(extent={{40,80},{60,100}})));
   Components.Boiler.BoilerInFinite Wood(
     limited_heat=true,
     Qmax=2420000,
@@ -101,18 +106,24 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensorStraw
     annotation (Placement(transformation(extent={{-22,-60},{-2,-40}})));
   Components.Control.FuelEfficiency fuelEfficiencyWood(
-    etaMin=0.2,
-    useExternalFile=false,
     EfficiencyTable=effTable.DataTable,
-    AllowedGap=1000) annotation (Placement(transformation(
+    AllowedGap=1000,
+    etaMin=0.59,
+    useExternalFile=true,
+    fileName=fileNameEffWood,
+    tableName="Efficiency")
+                     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,44})));
   Components.Control.FuelEfficiency fuelEfficiencyStraw(
-    etaMin=0.2,
-    useExternalFile=false,
     EfficiencyTable=effTable.DataTable,
-    AllowedGap=1000) annotation (Placement(transformation(
+    etaMin=0.57,
+    useExternalFile=true,
+    tableName="Efficiency",
+    AllowedGap=1000,
+    fileName=fileNameEffStraw)
+                     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,-20})));
@@ -121,6 +132,8 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
         1000000,0.25; 2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8; 3600000,
         0.81; 3800000,0.75; 4000000,0.7; 4200000,0.65])
     annotation (Placement(transformation(extent={{60,40},{80,60}})));
+  ConstantBoilerHeatFlowTwoLayer.TwentyFourHrs twentyFourHrs
+    annotation (Placement(transformation(extent={{40,80},{60,100}})));
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
   connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
@@ -130,7 +143,7 @@ fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
   connect(consumerTimeDependExt.heat_flow, storageTwoLayer.port_b)
     annotation (Line(points={{52,0},{52,0},{40,0}}, color={191,0,0}));
   connect(meanBoilerHeat.u1, storageTwoLayer.y) annotation (Line(points={{30,49.6},
-          {30,49.6},{30,10.6}},     color={0,0,127}));
+          {30,10.6}},               color={0,0,127}));
   connect(Outside_Temp_source.y[6], storageTwoLayer.u) annotation (Line(points={{30,-19},
           {30,-19},{30,-11.4}},                  color={0,0,127}));
   connect(heatFlowDivisor.y2,Wood. nominal_heat) annotation (Line(points={{-67,-14},

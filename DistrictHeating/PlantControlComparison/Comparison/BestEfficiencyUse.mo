@@ -4,6 +4,10 @@ model BestEfficiencyUse "Shows the work best efficiency control unit"
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   parameter String fileNameNetNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+  parameter String fileNameEffWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Wood.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
+ parameter String fileNameEffStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Straw.txt")
+    "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
@@ -37,7 +41,7 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={30,-30})));
-  DistrictHeating.Components.Storage.StorageTwoLayer storageTwoLayer(
+  Components.Storage.StorageTwoLayer                 storageTwoLayer(
     V=137,
     H=22,
     rho=water.rho,
@@ -49,29 +53,11 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     Tlow=313.15,
     Tref=313.15)
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  Components.Control.MaximalEfficiencyControl maximalEfficiencyControlStrawWood(
-    OuterLimits(start=false, fixed=true),
-    H=22,
-    Qstart(displayUnit="mW") = 0.01,
-    Triggerdelay(displayUnit="h") = 3600,
-    Triggerperiod(displayUnit="h") = 3600,
-    m=10,
-    HLowload=18,
-    QLowload(displayUnit="kW") = 250000,
-    Overproduction(displayUnit="kW") = 250000,
-    Underproduction(displayUnit="kW") = 500000,
-    QHighload(displayUnit="kW") = 250000,
-    HHighload=2,
-    EfficiencyTable=effTableWood.DataTable) annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=180,
-        origin={10,90})));
   BestEfficiencyTwoLayer.Table effTableStraw(DataTable(displayUnit="W") = [
       Modelica.Constants.eps,Modelica.Constants.eps; 500000,0.12; 1000000,0.25;
       2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8; 3600000,0.81; 3800000,
       0.75; 4000000,0.7; 4200000,0.65])
-    annotation (Placement(transformation(extent={{80,40},{100,60}})));
+    annotation (Placement(transformation(extent={{60,40},{80,60}})));
   Components.Boiler.BoilerInFinite Wood(
     limited_heat=true,
     Qmax=2420000,
@@ -88,24 +74,28 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     ActivateBothBoiler=1889000,
     DeactivateBothBoiler=2310000,
     DeactivateBaseBoiler=711000,
-    BaseHeatFlowBoth=1600000,
     MaxBaseLoad=3250000,
-    MaxPeakLoad=2420000)
+    MaxPeakLoad=2420000,
+    BaseHeatFlowBoth(displayUnit="kW") = 1600000)
     annotation (Placement(transformation(extent={{-88,-30},{-68,-10}})));
   Components.Control.FuelEfficiency fuelEfficiencyWood(
-    etaMin=0.2,
-    useExternalFile=false,
+    EfficiencyTable=effTableWood.DataTable,
     AllowedGap=1000,
-    EfficiencyTable=effTableWood.DataTable)
+    etaMin=0.59,
+    useExternalFile=true,
+    fileName=fileNameEffWood,
+    tableName="Efficiency")
                      annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,44})));
   Components.Control.FuelEfficiency fuelEfficiencyStraw(
-    etaMin=0.2,
-    useExternalFile=false,
+    EfficiencyTable=effTableStraw.DataTable,
     AllowedGap=1000,
-    EfficiencyTable=effTableStraw.DataTable)
+    etaMin=0.57,
+    useExternalFile=true,
+    fileName=fileNameEffStraw,
+    tableName="Efficiency")
                      annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -114,25 +104,28 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
       Modelica.Constants.eps,Modelica.Constants.eps; 500000,0.12; 1000000,0.25;
       2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8; 3600000,0.81; 3800000,
       0.75; 4000000,0.7; 4200000,0.65])
-    annotation (Placement(transformation(extent={{80,80},{100,100}})));
+    annotation (Placement(transformation(extent={{60,80},{80,100}})));
   Components.Control.MaximalEfficiencyControl maximalEfficiencyControlWood(
     OuterLimits(start=false, fixed=true),
     H=22,
     Qstart(displayUnit="mW") = 0.01,
     Triggerdelay(displayUnit="h") = 3600,
     Triggerperiod(displayUnit="h") = 3600,
-    m=10,
     HLowload=18,
     QLowload(displayUnit="kW") = 250000,
     Overproduction(displayUnit="kW") = 250000,
     Underproduction(displayUnit="kW") = 500000,
     QHighload(displayUnit="kW") = 250000,
     HHighload=2,
-    EfficiencyTable=effTableWood.DataTable) annotation (Placement(
+    EfficiencyTable=effTableWood.DataTable,
+    useExternalFile=true,
+    tableName="Efficiency",
+    m=10,
+    fileName=fileNameEffWood)               annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={10,60})));
+        origin={10,70})));
   Components.Control.MaximalEfficiencyControl maximalEfficiencyControlStraw(
     OuterLimits(start=false, fixed=true),
     H=22,
@@ -146,11 +139,14 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     QHighload(displayUnit="kW") = 250000,
     HHighload=2,
     EfficiencyTable=effTableStraw.DataTable,
+    useExternalFile=true,
+    fileName=fileNameEffStraw,
+    tableName="Efficiency",
     m=10)                                    annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={10,30})));
+        origin={10,40})));
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
 
@@ -158,18 +154,25 @@ fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
 fuelEfficiencyWood.u1=Wood.heatFlowSensor.Q_flow;
 fuelEfficiencyStraw.u1=Straw.heatFlowSensor.Q_flow;
 
-//for maximalEfficiencyControlStrawWood
-maximalEfficiencyControlStrawWood.u=consumerTimeDependExt.heat_demand-ConsumerBoth;
-
 //for heatFlowDivisor
 if State==1 then
-heatFlowDivisor.u1=maximalEfficiencyControlWood.y;
+  heatFlowDivisor.u1=maximalEfficiencyControlWood.y;
 elseif State==2 then
   heatFlowDivisor.u1=maximalEfficiencyControlStraw.y;
 else
-  heatFlowDivisor.u1=maximalEfficiencyControlStrawWood.y+ConsumerBoth;
+heatFlowDivisor.u1=maximalEfficiencyControlWood.y+ConsumerBoth;
 end if;
 
+//for input efficiency object wood
+if State==1 then
+    maximalEfficiencyControlWood.u=consumerTimeDependExt.heat_demand;
+elseif State==3 then
+  maximalEfficiencyControlWood.u=consumerTimeDependExt.heat_demand-ConsumerBoth;
+else
+     maximalEfficiencyControlWood.u=consumerTimeDependExt.heat_demand;
+end if;
+
+//definition consumer both
   ConsumerBoth=min(consumerTimeDependExt.heat_demand,min(heatFlowDivisor.BaseHeatFlowBoth, heatFlowDivisor.MaxBaseLoad));
 
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
@@ -191,22 +194,17 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
       Line(points={{-90,-26},{-96,-26},{-96,-80},{46,-80},{46,7},{51.4,7}},
         color={0,0,127}));
   connect(storageTwoLayer.y, maximalEfficiencyControlWood.u1) annotation (Line(
-        points={{30,10.6},{30,10.6},{30,36},{30,44},{10,44},{10,49.4}}, color={0,
+        points={{30,10.6},{30,10.6},{30,38},{30,56},{10,56},{10,59.4}}, color={0,
           0,127}));
-  connect(maximalEfficiencyControlStrawWood.u1, maximalEfficiencyControlWood.u1)
-    annotation (Line(points={{10,79.4},{10,74},{30,74},{30,44},{10,44},{10,49.4}},
-        color={0,0,127}));
   connect(maximalEfficiencyControlStraw.u1, maximalEfficiencyControlWood.u1)
-    annotation (Line(points={{10,19.4},{10,16},{30,16},{30,44},{10,44},{10,49.4}},
+    annotation (Line(points={{10,29.4},{10,20},{30,20},{30,56},{10,56},{10,59.4}},
         color={0,0,127}));
-  connect(maximalEfficiencyControlWood.u, consumerTimeDependExt.heat_demand)
-    annotation (Line(points={{21.2,60},{46,60},{46,7},{51.4,7}}, color={0,0,127}));
-  connect(maximalEfficiencyControlStraw.u, consumerTimeDependExt.heat_demand)
-    annotation (Line(points={{21.2,30},{46,30},{46,7},{51.4,7}}, color={0,0,127}));
   connect(Wood.thermal_heat_flow, storageTwoLayer.port_a)
     annotation (Line(points={{-36,14},{8,14},{8,0},{20,0}}, color={191,0,0}));
   connect(Straw.thermal_heat_flow, storageTwoLayer.port_a) annotation (Line(
         points={{-36,-50},{8,-50},{8,0},{20,0}}, color={191,0,0}));
+  connect(maximalEfficiencyControlStraw.u, consumerTimeDependExt.heat_demand)
+    annotation (Line(points={{21.2,40},{46,40},{46,7},{51.4,7}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
