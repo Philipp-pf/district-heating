@@ -32,7 +32,8 @@ Modelica.Blocks.Sources.Ramp ConsumerRamp(
         rotation=180,
         origin={90,0})));
 DistrictHeating.Components.Boiler.BoilerInFinite boilerInFinite(limited_heat=
-      false, TimeFirstOrder=0.001)
+      false, TimeFirstOrder=0.001,
+    PartLoad=0)
   annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 Modelica.Blocks.Continuous.Derivative Slope(
     k=1,

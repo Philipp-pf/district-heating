@@ -84,12 +84,14 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Components.Boiler.BoilerInFinite Wood(
     limited_heat=true,
     Qmax=2420000,
-    TimeFirstOrder(displayUnit="min") = 600)
+    TimeFirstOrder(displayUnit="min") = 600,
+    PartLoad=0)
     annotation (Placement(transformation(extent={{-56,4},{-36,24}})));
   Components.Boiler.BoilerInFinite Straw(
     limited_heat=true,
     Qmax=3250000,
-    TimeFirstOrder(displayUnit="min") = 600)
+    TimeFirstOrder(displayUnit="min") = 600,
+    PartLoad=0)
     annotation (Placement(transformation(extent={{-56,-60},{-36,-40}})));
   Components.Control.HeatFlowDivisor heatFlowDivisor(
     WaitingTime(displayUnit="h") = 43200,

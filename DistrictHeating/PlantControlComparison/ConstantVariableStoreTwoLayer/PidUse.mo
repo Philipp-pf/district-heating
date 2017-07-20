@@ -34,7 +34,9 @@ model PidUse
                                      Qpeak(displayUnit="kW") = 1000000, Qbase(
         displayUnit="kW") = 4000000,
     TimeFirstOrderBase=0.001,
-    TimeFirstOrderPeak=0.001)
+    TimeFirstOrderPeak=0.001,
+    PartLoadBase=0,
+    PartLoadPeak=0)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   DistrictHeating.Components.Control.PIDControlStorageFilling
                               PID(

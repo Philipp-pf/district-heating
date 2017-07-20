@@ -3,17 +3,37 @@ model BoilerBasicPeak "Boiler which divides into basic and peak load"
   //Source bitmap: https://pixabay.com/de/feuer-gelb-flamme-rot-brennen-30276/
 
 parameter Modelica.SIunits.HeatFlowRate Qbase "maximal basic load power";
+parameter Real PartLoadBase
+    "gives part load ability in percent (if PartLoad=0, then minimal Load is disabled";
 parameter Modelica.SIunits.HeatFlowRate Qpeak "maximal peak load power";
+parameter Real PartLoadPeak
+    "gives part load ability in percent (if PartLoad=0, then minimal Load is disabled";
 parameter Modelica.SIunits.Time TimeFirstOrderBase=0.001
     "time constant of base load boiler first order object";
 parameter Modelica.SIunits.Time TimeFirstOrderPeak=0.001
     "time constant of peak load boiler first order object";
-Modelica.SIunits.HeatFlowRate HeatFlowBase;
-Modelica.SIunits.HeatFlowRate HeatFlowPeak;
-Modelica.SIunits.HeatFlowRate HeatFlow;
-Modelica.SIunits.Heat HeatBase;
-Modelica.SIunits.Heat HeatPeak;
-Modelica.SIunits.Heat Heat;
+    Modelica.SIunits.HeatFlowRate HeatFlowBase
+    "usable heat flow rate of the boiler";
+Modelica.SIunits.HeatFlowRate HeatFlowPeak
+    "usable heat flow rate of the boiler";
+Modelica.SIunits.HeatFlowRate HeatFlow
+    "sum of usable heat flow rate of both boiler";
+Modelica.SIunits.Heat HeatBase "produced heat of boiler";
+Modelica.SIunits.Heat HeatPeak "produced heat of boiler";
+Modelica.SIunits.Heat Heat "produced heat of both boiler";
+//symbols
+Modelica.SIunits.HeatFlowRate Qf_base=heatFlowSensor.Q_flow
+    "usable heat flow rate of base boiler";
+Modelica.SIunits.HeatFlowRate Qfmax_base=Qbase
+    "maximal heat flow rate of base boiler";
+Modelica.SIunits.HeatFlowRate Qfmin_base=Qbase*PartLoadBase
+    "minimal heat flow rate of base boiler";
+Modelica.SIunits.HeatFlowRate Qf_peak=heatFlowSensor1.Q_flow
+    "usable heat flow rate of base boiler";
+Modelica.SIunits.HeatFlowRate Qfmax_peak=Qpeak
+    "maximal heat flow rate of base boiler";
+Modelica.SIunits.HeatFlowRate Qfmin_peak=Qpeak*PartLoadPeak
+    "minimal heat flow rate of base boiler";
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow base_boiler
     annotation (Placement(transformation(extent={{14,-10},{34,10}})));
   Modelica.Blocks.Interfaces.RealInput nominal_heat
@@ -26,13 +46,14 @@ Modelica.SIunits.Heat Heat;
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={48,-62})));
+        origin={50,-62})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensor
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={48,0})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=Qbase, uMin=0)
+        origin={50,0})));
+  Modelica.Blocks.Nonlinear.Limiter limiter2(uMax=Qbase, uMin=Qbase*
+        PartLoadBase)
     annotation (Placement(transformation(extent={{-74,-10},{-54,10}})));
   Modelica.Blocks.Math.Feedback feedback annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -40,24 +61,25 @@ Modelica.SIunits.Heat Heat;
         origin={-68,-32})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow peak_boiler
     annotation (Placement(transformation(extent={{14,-42},{34,-22}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter1(uMax=Qpeak, uMin=0)
+  Modelica.Blocks.Nonlinear.Limiter limiter1(uMax=Qpeak, uMin=Qpeak*
+        PartLoadPeak)
     annotation (Placement(transformation(extent={{-40,-42},{-20,-22}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatFlowSensor1
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={78,-32})));
+        origin={80,-32})));
   Modelica.Blocks.Continuous.Integrator heat_flow_counter_peak(y_start=0, k=1)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={78,-62})));
+        origin={80,-62})));
   Modelica.Blocks.Continuous.FirstOrder firstOrderBase(
     k=1,
     initType=Modelica.Blocks.Types.Init.InitialState,
     y_start=0,
     T=TimeFirstOrderBase)
-               annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
+               annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrderPeak(
     k=1,
     initType=Modelica.Blocks.Types.Init.InitialState,
@@ -72,33 +94,40 @@ HeatFlow=HeatFlowBase+HeatFlowPeak;
 HeatBase=heat_flow_counter_base.y;
 HeatPeak=heat_flow_counter_peak.y;
 Heat=HeatBase+HeatPeak;
+//connection between limiter and first order
+if feedback.y<=0 then
+  firstOrderPeak.u=0;
+else
+  firstOrderPeak.u=limiter1.y;
+end if;
+if nominal_heat<=0 then
+  firstOrderBase.u=0;
+else
+  firstOrderBase.u=limiter2.y;
+end if;
+
   connect(base_boiler.port, heatFlowSensor.port_a)
-    annotation (Line(points={{34,0},{38,0}},        color={191,0,0}));
+    annotation (Line(points={{34,0},{40,0}},        color={191,0,0}));
   connect(thermal_heat_flow, heatFlowSensor.port_b)
-    annotation (Line(points={{100,0},{58,0}},        color={191,0,0}));
-  connect(limiter.u, nominal_heat)
+    annotation (Line(points={{100,0},{60,0}},        color={191,0,0}));
+  connect(limiter2.u, nominal_heat)
     annotation (Line(points={{-76,0},{-76,0},{-104,0}}, color={0,0,127}));
   connect(feedback.u1, nominal_heat) annotation (Line(points={{-76,-32},{-82,-32},
           {-82,0},{-104,0}},      color={0,0,127}));
-  connect(feedback.u2, limiter.y) annotation (Line(points={{-68,-40},{-68,-56},{
-          -48,-56},{-48,0},{-53,0}},  color={0,0,127}));
+  connect(feedback.u2, limiter2.y) annotation (Line(points={{-68,-40},{-68,-56},
+          {-48,-56},{-48,0},{-53,0}}, color={0,0,127}));
   connect(limiter1.u, feedback.y)
     annotation (Line(points={{-42,-32},{-59,-32}}, color={0,0,127}));
   connect(peak_boiler.port, heatFlowSensor1.port_a)
-    annotation (Line(points={{34,-32},{68,-32}},          color={191,0,0}));
+    annotation (Line(points={{34,-32},{70,-32}},          color={191,0,0}));
   connect(heatFlowSensor1.port_b, heatFlowSensor.port_b) annotation (Line(
-        points={{88,-32},{90,-32},{90,0},{58,0}}, color={191,0,0}));
+        points={{90,-32},{92,-32},{92,0},{60,0}}, color={191,0,0}));
   connect(heat_flow_counter_peak.u, heatFlowSensor1.Q_flow)
-    annotation (Line(points={{78,-50},{78,-46},{78,-42}},
-                                                 color={0,0,127}));
+    annotation (Line(points={{80,-50},{80,-42}}, color={0,0,127}));
   connect(heat_flow_counter_base.u, heatFlowSensor.Q_flow)
-    annotation (Line(points={{48,-50},{48,-50},{48,-10}}, color={0,0,127}));
+    annotation (Line(points={{50,-50},{50,-50},{50,-10}}, color={0,0,127}));
   connect(base_boiler.Q_flow, firstOrderBase.y)
-    annotation (Line(points={{14,0},{8,0},{1,0}}, color={0,0,127}));
-  connect(firstOrderBase.u, limiter.y)
-    annotation (Line(points={{-22,0},{-53,0}}, color={0,0,127}));
-  connect(limiter1.y, firstOrderPeak.u)
-    annotation (Line(points={{-19,-32},{-16,-32},{-14,-32}}, color={0,0,127}));
+    annotation (Line(points={{14,0},{9,0}},       color={0,0,127}));
   connect(peak_boiler.Q_flow, firstOrderPeak.y)
     annotation (Line(points={{14,-32},{12,-32},{9,-32}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

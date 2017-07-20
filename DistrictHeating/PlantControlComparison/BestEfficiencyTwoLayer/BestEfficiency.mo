@@ -47,7 +47,9 @@ model BestEfficiency "Shows the work best efficiency control unit"
     Qbase=4000000,
     Qpeak=1000000,
     TimeFirstOrderBase=0.001,
-    TimeFirstOrderPeak=0.001)
+    TimeFirstOrderPeak=0.001,
+    PartLoadBase=0,
+    PartLoadPeak=0)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Components.Control.MaximalEfficiencyControl maximalEfficiencyControl(
     OuterLimits(start=false, fixed=true),

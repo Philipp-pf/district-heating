@@ -39,15 +39,18 @@ Modelica.SIunits.HeatFlowRate AvStoreLoss
         origin={-8,-38})));
   DistrictHeating.Components.Boiler.BoilerInFinite Straw(limited_heat=true,
     Qmax=3000000,
-    TimeFirstOrder=0.001)
+    TimeFirstOrder=0.001,
+    PartLoad=0)
     annotation (Placement(transformation(extent={{-72,74},{-52,94}})));
   DistrictHeating.Components.Boiler.BoilerInFinite Wood(limited_heat=true,
     Qmax=2200000,
-    TimeFirstOrder=0.001)
+    TimeFirstOrder=0.001,
+    PartLoad=0)
     annotation (Placement(transformation(extent={{-72,44},{-52,64}})));
   DistrictHeating.Components.Boiler.BoilerInFinite Oil(limited_heat=true, Qmax(
         displayUnit="kW") = 1950000,
-    TimeFirstOrder=0.001)
+    TimeFirstOrder=0.001,
+    PartLoad=0)
     annotation (Placement(transformation(extent={{-72,14},{-52,34}})));
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
     consumerTimeDependExt
