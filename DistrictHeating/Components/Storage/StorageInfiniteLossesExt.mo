@@ -17,6 +17,9 @@ model StorageInfiniteLossesExt "Storage Model with infinite Energy Storage"
     Modelica.SIunits.HeatFlowRate Q "Store Losses by average G";
     Modelica.SIunits.ThermalConductance Gvar
     "Thermal conductance of the storage (calculated)";
+    //symbols
+    Modelica.SIunits.Heat Q_store=Stored_Heat
+    "stored heat refering to reference temperature";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_input
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));

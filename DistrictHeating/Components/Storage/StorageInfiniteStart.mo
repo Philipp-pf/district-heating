@@ -12,6 +12,9 @@ parameter Modelica.SIunits.ThermalConductance G( start=0)
     Modelica.SIunits.Temperature T_actual "current storage temperature";
     Modelica.SIunits.Heat Stored_Heat
     "Stored heat refered to Referencetemperature";
+    //symbols
+    Modelica.SIunits.Heat Q_store=Stored_Heat
+    "stored heat refering to reference temperature";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_input
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));

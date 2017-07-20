@@ -30,6 +30,13 @@ model StorageTwoLayer
    Modelica.SIunits.HeatFlowRate Qunload "Heat flow that unloads the storage";
    Modelica.SIunits.HeatFlowRate Qloss "Store Losses";
    Modelica.SIunits.Temperature Tout "Outside Temperature";
+    //symbols
+    Modelica.SIunits.Heat Q_store=cp*rho*(Vhigh*(Thigh-Tref)+Vlow*(Tlow-Tref))
+    "stored heat refering to reference temperature";
+    Modelica.SIunits.Heat Qmax_store=V*cp*rho*(Thigh-Tref)
+    "maximal stored heat refering to reference temperature";
+    Modelica.SIunits.Heat Qmin_store=V*cp*rho*(Tlow-Tref)
+    "minimal stored heat refering to reference temperature";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));

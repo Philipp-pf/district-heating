@@ -25,6 +25,13 @@ parameter Modelica.SIunits.ThermalConductance G
     Boolean Store_empty "true, if store is empty";
     Modelica.SIunits.HeatFlowRate Store_un_load
     "Heat Flow Difference between load Heat and unload Heat";
+    //symbols
+    Modelica.SIunits.Heat Q_store=Stored_Energy
+    "stored heat refering to reference temperature";
+    Modelica.SIunits.Heat Qmax_store=Store.C*(T_max-T_ref)
+    "maximal stored heat refering to reference temperature";
+    Modelica.SIunits.Heat Qmin_store=Store.C*(T_min-T_ref)
+    "minimal stored heat refering to reference temperature";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_input
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
