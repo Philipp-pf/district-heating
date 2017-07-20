@@ -4,6 +4,9 @@ model ConsumerTimeDepend
 
 parameter Real time_heat[:,:] "heat demand dependent to time";
 parameter Modelica.SIunits.Time tstart( start= 0) "start time of table";
+    //symbols
+    Modelica.SIunits.HeatFlowRate Q_consum=heat_demand
+    "consumer heat flow rate";
 
 Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heat_flow_consumer
     annotation (Placement(transformation(

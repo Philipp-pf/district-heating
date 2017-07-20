@@ -5,7 +5,9 @@ model ConsumerTimeDependData
 parameter Modelica.SIunits.Time tstart( start= 0) "start time of table";
   parameter String fileName="fileName" "File on which data is present"                                        annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Choose Text File with Consumer Heat Demand")));
   parameter String tableName="tableName" "Table Name in the file";
-
+    //symbols
+    Modelica.SIunits.HeatFlowRate Q_consum=heat_demand
+    "consumer heat flow rate";
 Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heat_flow_consumer
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},

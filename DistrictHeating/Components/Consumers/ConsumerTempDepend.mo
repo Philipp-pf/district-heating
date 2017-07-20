@@ -4,6 +4,9 @@ model ConsumerTempDepend
 
     parameter Real temp[:,2]
     "temperature to heat (left column outside temperature in °C, right column heat flow in W";
+    //symbols
+    Modelica.SIunits.HeatFlowRate Q_consum=heat_demand
+    "consumer heat flow rate";
 
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heat_flow_consumer
     annotation (Placement(transformation(

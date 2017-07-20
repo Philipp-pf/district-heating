@@ -2,6 +2,9 @@ within DistrictHeating.Components.Consumers;
 model ConsumerTimeDependExt
   "time dependence of the heat consumptionparameter time_to_heat; "
 
+    //symbols
+    Modelica.SIunits.HeatFlowRate Q_consum=heat_demand
+    "consumer heat flow rate";
 Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heat_flow_consumer
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
