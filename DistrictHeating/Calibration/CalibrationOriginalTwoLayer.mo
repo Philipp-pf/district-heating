@@ -144,16 +144,17 @@ Modelica.SIunits.Heat StoreLossesOrig
         rotation=90,
         origin={0,-34})));
 
-  DistrictHeating.Components.Storage.StorageTwoLayer Store(
+  Components.Storage.StorageTwoLayerNoLimit          Store(
     V=137,
     H=22,
     rho=water.rho,
     cp=water.cp,
     U=13.0,
-    Hboard(fixed=true, start=37.0),
     Thigh=363.15,
     Tlow=313.15,
-    Tref=280) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    Tref=280,
+    Hboard(fixed=true, start=11.0))
+              annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 equation
   Store.Qloss=Int_Store_Losses.u
     "Connection between Store Losses and its Integrator";
