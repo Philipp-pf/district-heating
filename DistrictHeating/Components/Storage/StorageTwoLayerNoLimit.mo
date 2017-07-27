@@ -37,6 +37,7 @@ model StorageTwoLayerNoLimit
     "maximal stored heat refering to reference temperature";
     Modelica.SIunits.Heat Qmin_store=V*cp*rho*(Tlow-Tref)
     "minimal stored heat refering to reference temperature";
+    Modelica.SIunits.Heat HeatStoreOnlyHot "stored heat only hot layer";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
@@ -77,6 +78,8 @@ equation
     H >= Hboard,
     "Storage is out of lower limit (underloaded)",
     AssertionLevel.warning);
+
+HeatStoreOnlyHot=Vhigh*cp*rho*(Thigh-Tref);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
