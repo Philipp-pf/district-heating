@@ -144,17 +144,20 @@ Modelica.SIunits.Heat StoreLossesOrig
         rotation=90,
         origin={0,-34})));
 
-  Components.Storage.StorageTwoLayerNoLimit          Store(
+  Components.Storage.StorageTwoLayerNoLimitVariableU Store(
     V=137,
     H=22,
     rho=water.rho,
     cp=water.cp,
-    U=13.0,
+    Hboard(fixed=true, start=22),
     Thigh=363.15,
     Tlow=313.15,
-    Tref=280,
-    Hboard(fixed=true, start=11.0))
-              annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    Tref=280) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+  Modelica.Blocks.Sources.TimeTable timeTable(
+    offset=0,
+    startTime=0,
+    table=[0,0; 2002800,0; 2002801,13; 24313375,13; 24313376,0; 2.5e7,0])
+    annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 equation
   Store.Qloss=Int_Store_Losses.u
     "Connection between Store Losses and its Integrator";
@@ -186,7 +189,8 @@ equation
   connect(Used_Heat.port_b, consumerTimeDependExt.heat_flow)
     annotation (Line(points={{40,0},{50,0}}, color={191,0,0}));
   connect(Produced_heat.Q_flow, Int_Prod_Heat.u)
-    annotation (Line(points={{-30,-10},{-30,-58}}, color={0,0,127}));
+    annotation (Line(points={{-30,-10},{-30,-26},{-30,-58}},
+                                                   color={0,0,127}));
   connect(Original_heat.y, Absolute_Difference_Actual_Target.u1)
     annotation (Line(points={{50.4,70},{62,70}},         color={0,0,127}));
   connect(Produced_heat.port_b, Store.port_a)
@@ -195,9 +199,14 @@ equation
     annotation (Line(points={{20,0},{16,0},{10,0}}, color={191,0,0}));
   connect(Outside_Temp_source.y[6], Store.u)
     annotation (Line(points={{0,-23},{0,-11.4}}, color={0,0,127}));
+  connect(Store.u1, timeTable.y) annotation (Line(points={{-10.6,-7},{-16,-7},{
+          -16,50},{-19,50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=2.4886e+007, Interval=60),
+    experiment(
+      StartTime=2e+006,
+      StopTime=2.43134e+007,
+      Interval=60),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <p>This calibration model uses the two layer storage. Adjustable parameters in the model are:</p>
