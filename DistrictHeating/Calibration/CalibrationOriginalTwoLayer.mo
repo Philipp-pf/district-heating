@@ -3,17 +3,17 @@ model CalibrationOriginalTwoLayer
 
 extends Modelica.Icons.Example;
 
-  parameter String fileNameStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Straw_original.txt")
+  parameter String fileNameStrawNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Straw_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   parameter String fileNameOil = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Oil_original.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
-  parameter String fileNameWood = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Wood_original.txt")
+  parameter String fileNameWoodNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Wood_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
   parameter String fileNameStore = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Store.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
-  parameter String fileNameTemperature = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Outsidetemperature_original.txt")
+  parameter String fileNameTemperatureNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Outsidetemperature_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
-  parameter String fileNameNet = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original.txt")
+  parameter String fileNameNetNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Net_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
 Modelica.SIunits.Heat StoreLossesOrig
@@ -46,7 +46,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     tableName="Netzleistung",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameNet)                                       annotation (
+    fileName=fileNameNetNew)                                    annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -67,7 +67,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     columns={2,3,4,5,6,7},
     tableName="Hackgutleistung",
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameWood)
+    fileName=fileNameWoodNew)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -77,7 +77,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     columns={2,3,4,5,6,7},
     tableName="Strohleistung",
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameStraw)
+    fileName=fileNameStrawNew)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -138,7 +138,7 @@ Modelica.SIunits.Heat StoreLossesOrig
     tableName="Aussentemperatur",
     columns={2,3,4,5,6,7},
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
-    fileName=fileNameTemperature)                               annotation (
+    fileName=fileNameTemperatureNew)                            annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
