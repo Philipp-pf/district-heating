@@ -3,6 +3,7 @@ Calibration_original
 CalibrationOriginalTwoLayer
 TwoLayerFindUsedHeat
 TwoLayerFindProdHeat
+TwoLayerFindAverageLoss
 StoreHeatFlowLosses
 CalibrationOriginalFirstTryShort
 CalibrationOriginalFirstTryLong

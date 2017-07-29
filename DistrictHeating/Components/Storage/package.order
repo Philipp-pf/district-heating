@@ -5,6 +5,7 @@ StorageTwoLayerNoLimit
 StorageTwoLayerNoLimitVariableU
 StorageTwoLayerNoLimitVariableUFindUsed
 StorageTwoLayerNoLimitVariableUFindProd
+StorageTwoLayerNoLimitFindU
 StorageInfiniteLossesExt
 StorageInfiniteGvar
 StorageInfiniteStart
