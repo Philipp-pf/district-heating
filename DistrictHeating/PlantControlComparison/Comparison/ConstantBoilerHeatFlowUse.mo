@@ -46,17 +46,17 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Components.Control.MeanBoilerHeatTwoLayer
                          meanBoilerHeat(
     preYstart=true,
-    TimeConstant(displayUnit="h") = twentyFourHrs.TimeConstant,
-    Hhighload1=twentyFourHrs.Hhighload1,
-    khigh1=twentyFourHrs.khigh1,
-    Hhighload2=twentyFourHrs.Hhighload2,
-    khigh2=twentyFourHrs.khigh2,
-    Hlowload2=twentyFourHrs.Hlowload2,
-    klow2=twentyFourHrs.klow2,
-    Hlowload1=twentyFourHrs.Hlowload1,
-    klow1=twentyFourHrs.klow1,
-    QStart=twentyFourHrs.QStart,
-    TStart=twentyFourHrs.TStart)
+    TimeConstant(displayUnit="h") = eightHrs.TimeConstant,
+    Hhighload1=eightHrs.Hhighload1,
+    khigh1=eightHrs.khigh1,
+    Hhighload2=eightHrs.Hhighload2,
+    khigh2=eightHrs.khigh2,
+    Hlowload2=eightHrs.Hlowload2,
+    klow2=eightHrs.klow2,
+    Hlowload1=eightHrs.Hlowload1,
+    klow1=eightHrs.klow1,
+    QStart=eightHrs.QStart,
+    TStart=eightHrs.TStart)
                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -75,9 +75,13 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   ConstantBoilerHeatFlowTwoLayer.FourHrs fourHrs(klow1=0.84)
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
   ConstantBoilerHeatFlowTwoLayer.EightHrs eightHrs(
-    khigh1=1.32,
-    khigh2=1.45,
-    klow1=0.73)
+    khigh1=1.5,
+    khigh2=1.3,
+    klow1=0.64,
+    QStart=100000,
+    TStart=2016800.0,
+    Hhighload1=4.8,
+    Hlowload1=15.8)
     annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
   ConstantBoilerHeatFlowTwoLayer.TwelveHrs twelveHrs(khigh1=1.41, klow1=0.99)
     annotation (Placement(transformation(extent={{0,80},{20,100}})));
