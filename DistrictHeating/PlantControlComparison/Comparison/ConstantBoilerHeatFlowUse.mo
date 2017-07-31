@@ -46,17 +46,17 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Components.Control.MeanBoilerHeatTwoLayer
                          meanBoilerHeat(
     preYstart=true,
-    TimeConstant(displayUnit="h") = eightHrs.TimeConstant,
-    Hhighload1=eightHrs.Hhighload1,
-    khigh1=eightHrs.khigh1,
-    Hhighload2=eightHrs.Hhighload2,
-    khigh2=eightHrs.khigh2,
-    Hlowload2=eightHrs.Hlowload2,
-    klow2=eightHrs.klow2,
-    Hlowload1=eightHrs.Hlowload1,
-    klow1=eightHrs.klow1,
-    QStart=eightHrs.QStart,
-    TStart=eightHrs.TStart)
+    TimeConstant(displayUnit="h") = twentyFourHrs.TimeConstant,
+    Hhighload1=twentyFourHrs.Hhighload1,
+    khigh1=twentyFourHrs.khigh1,
+    Hhighload2=twentyFourHrs.Hhighload2,
+    khigh2=twentyFourHrs.khigh2,
+    Hlowload2=twentyFourHrs.Hlowload2,
+    klow2=twentyFourHrs.klow2,
+    Hlowload1=twentyFourHrs.Hlowload1,
+    klow1=twentyFourHrs.klow1,
+    QStart=twentyFourHrs.QStart,
+    TStart=twentyFourHrs.TStart)
                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
