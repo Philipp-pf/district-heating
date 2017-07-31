@@ -9,8 +9,15 @@ model withoutStore
  parameter String fileNameEffStraw = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Efficiency_Straw.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
-Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
+Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
+  Real BoilerEfficiency "Efficiency of both boiler";
+  Real StoreEfficiency "Efficiency of store";
+  Real OverAllEfficiency "Efficiency of whole plant";
+  Modelica.SIunits.Heat UsedHeat(start=0, fixed=true)
+    "Heat demand of consumers over season";
+  Modelica.SIunits.Heat ProducedHeat(start=0, fixed=true)
+    "Produced heat of boilers";
 
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
     consumerTimeDependExt
@@ -74,15 +81,28 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
         rotation=90,
         origin={-40,-18})));
   DistrictHeating.PlantControlComparison.BestEfficiencyTwoLayer.Table effTable(DataTable(
-        displayUnit="W") = [Modelica.Constants.eps,Modelica.Constants.eps;
-      500000,0.12; 1000000,0.25; 2000000,0.45; 3000000,0.7; 3200000,0.75;
-      3400000,0.8; 3600000,0.81; 3800000,0.75; 4000000,0.7; 4200000,0.65])
-    annotation (Placement(transformation(extent={{74,72},{94,92}})));
+        displayUnit="W") = [Modelica.Constants.eps,Modelica.Constants.eps; 500000,
+      0.12; 1000000,0.25; 2000000,0.45; 3000000,0.7; 3200000,0.75; 3400000,0.8;
+      3600000,0.81; 3800000,0.75; 4000000,0.7; 4200000,0.65])
+    annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heatCapacitor(C=90*
         water.cp*water.rho, T(fixed=true, start=273.15))
     annotation (Placement(transformation(extent={{20,20},{40,40}})));
+
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
+
+consumerTimeDependExt.heat_demand=der(UsedHeat);
+heatFlowSensorWood.Q_flow+heatFlowSensorStraw.Q_flow=der(ProducedHeat);
+if FuelEnergy<=0 or ProducedHeat<=0 then
+  BoilerEfficiency=0;
+StoreEfficiency=0;
+  else
+BoilerEfficiency=ProducedHeat/FuelEnergy;
+StoreEfficiency=UsedHeat/ProducedHeat;
+end if;
+OverAllEfficiency=BoilerEfficiency*StoreEfficiency;
+
 connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
   annotation (Line(points={{70.6,0},{70.6,0},{79,0}},      color={0,0,127}));
   connect(heatFlowDivisor.y2, Wood.nominal_heat) annotation (Line(points={{-67,-14},

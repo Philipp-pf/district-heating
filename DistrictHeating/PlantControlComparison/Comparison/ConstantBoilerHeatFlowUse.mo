@@ -17,6 +17,13 @@ model ConstantBoilerHeatFlowUse
 
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
+  Real BoilerEfficiency "Efficiency of both boiler";
+  Real StoreEfficiency "Efficiency of store";
+  Real OverAllEfficiency "Efficiency of whole plant";
+  Modelica.SIunits.Heat UsedHeat(start=0, fixed=true)
+    "Heat demand of consumers over season";
+  Modelica.SIunits.Heat ProducedHeat(start=0, fixed=true)
+    "Produced heat of boilers";
 
   DistrictHeating.Components.Consumers.ConsumerTimeDependExt
     consumerTimeDependExt
@@ -142,6 +149,16 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     annotation (Placement(transformation(extent={{40,80},{60,100}})));
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
+consumerTimeDependExt.heat_demand=der(UsedHeat);
+heatFlowSensorWood.Q_flow+heatFlowSensorStraw.Q_flow=der(ProducedHeat);
+if FuelEnergy<=0 or ProducedHeat<=0 then
+  BoilerEfficiency=0;
+StoreEfficiency=0;
+  else
+BoilerEfficiency=ProducedHeat/FuelEnergy;
+StoreEfficiency=UsedHeat/ProducedHeat;
+end if;
+OverAllEfficiency=BoilerEfficiency*StoreEfficiency;
   connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
     annotation (Line(points={{72.6,0},{72.6,0},{79,0}},      color={0,0,127}));
   connect(consumerTimeDependExt.heat_demand, meanBoilerHeat.u) annotation (Line(

@@ -11,6 +11,13 @@ model BestEfficiencyUse "Shows the work best efficiency control unit"
 
 Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
   Real zero=0 "for storage limitation in diagramme";
+  Real BoilerEfficiency "Efficiency of both boiler";
+  Real StoreEfficiency "Efficiency of store";
+  Real OverAllEfficiency "Efficiency of whole plant";
+  Modelica.SIunits.Heat UsedHeat(start=0, fixed=true)
+    "Heat demand of consumers over season";
+  Modelica.SIunits.Heat ProducedHeat(start=0, fixed=true)
+    "Produced heat of boilers";
 
   //for getting maximal efficiency points
   Integer State=heatFlowDivisor.State "gives state of which boiler is in use";
@@ -151,6 +158,16 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
         origin={10,40})));
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
+consumerTimeDependExt.heat_demand=der(UsedHeat);
+heatFlowSensorWood.Q_flow+heatFlowSensorStraw.Q_flow=der(ProducedHeat);
+if FuelEnergy<=0 or ProducedHeat<=0 then
+  BoilerEfficiency=0;
+StoreEfficiency=0;
+  else
+BoilerEfficiency=ProducedHeat/FuelEnergy;
+StoreEfficiency=UsedHeat/ProducedHeat;
+end if;
+OverAllEfficiency=BoilerEfficiency*StoreEfficiency;
 
 //connections
 fuelEfficiencyWood.u1=Wood.heatFlowSensor.Q_flow;
