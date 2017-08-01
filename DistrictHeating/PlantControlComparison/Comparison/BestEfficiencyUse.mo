@@ -85,7 +85,7 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     DeactivateBaseBoiler=711000,
     MaxBaseLoad=3250000,
     MaxPeakLoad=2420000,
-    BaseHeatFlowBoth(displayUnit="kW") = 1600000)
+    BaseHeatFlowBoth(displayUnit="kW") = 1200000)
     annotation (Placement(transformation(extent={{-88,-30},{-68,-10}})));
   Components.Control.FuelEfficiency fuelEfficiencyWood(
     EfficiencyTable=effTableWood.DataTable,
@@ -120,17 +120,17 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     Qstart(displayUnit="mW") = 0.01,
     Triggerdelay(displayUnit="h") = 3600,
     Triggerperiod(displayUnit="h") = 3600,
-    HLowload=18,
-    QLowload(displayUnit="kW") = 250000,
-    Overproduction(displayUnit="kW") = 250000,
-    Underproduction(displayUnit="kW") = 500000,
+    QLowload=300000.0,
     QHighload(displayUnit="kW") = 250000,
     HHighload=2,
     EfficiencyTable=effTableWood.DataTable,
     useExternalFile=true,
     tableName="Efficiency",
-    m=10,
-    fileName=fileNameEffWood)               annotation (Placement(
+    fileName=fileNameEffWood,
+    Overproduction(displayUnit="kW") = 250000,
+    HLowload=17,
+    Underproduction(displayUnit="kW") = 400000,
+    m=11)                                   annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -141,17 +141,17 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
     Qstart(displayUnit="mW") = 0.01,
     Triggerdelay(displayUnit="h") = 3600,
     Triggerperiod(displayUnit="h") = 3600,
-    HLowload=18,
-    QLowload(displayUnit="kW") = 250000,
-    Overproduction(displayUnit="kW") = 250000,
-    Underproduction(displayUnit="kW") = 500000,
+    QLowload=300000.0,
     QHighload(displayUnit="kW") = 250000,
     HHighload=2,
     EfficiencyTable=effTableStraw.DataTable,
     useExternalFile=true,
     fileName=fileNameEffStraw,
     tableName="Efficiency",
-    m=10)                                    annotation (Placement(
+    Overproduction(displayUnit="kW") = 250000,
+    HLowload=17,
+    Underproduction(displayUnit="kW") = 400000,
+    m=11)                                    annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -159,7 +159,7 @@ Modelica.SIunits.Heat FuelEnergy "sum of fuel energy over whole season";
 equation
 fuelEfficiencyWood.integrator.y+fuelEfficiencyStraw.integrator.y=FuelEnergy;
 consumerTimeDependExt.heat_demand=der(UsedHeat);
-heatFlowSensorWood.Q_flow+heatFlowSensorStraw.Q_flow=der(ProducedHeat);
+storageTwoLayer.Qload=der(ProducedHeat);
 if FuelEnergy<=0 or ProducedHeat<=0 then
   BoilerEfficiency=0;
 StoreEfficiency=0;
