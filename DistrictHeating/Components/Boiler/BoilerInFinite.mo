@@ -51,19 +51,13 @@ Modelica.SIunits.Heat Heat;
     y_start=0,
     T=TimeFirstOrder)
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter1(               uMax=Modelica.Constants.inf, uMin=
-        PartLoad*Qmax)
+  Modelica.Blocks.Nonlinear.Limiter limiter1(               uMax=Modelica.Constants.inf, uMin=0)
     annotation (Placement(transformation(extent={{-72,-50},{-52,-30}})));
 equation
 
 HeatFlowRate=heatFlowSensor.Q_flow;
 Heat=heat_counter.y;
 //connection between switch and limiter1
-if nominal_heat<=0 then
-  switch.u3=0;
-else
-  switch.u3=limiter1.y;
-end if;
 if nominal_heat<=0 then
   switch.u1=0;
 else
@@ -86,6 +80,8 @@ end if;
     annotation (Line(points={{-13,0},{-2,0}}, color={0,0,127}));
   connect(limiter1.u, limiter2.u) annotation (Line(points={{-74,-40},{-80,-40},{
           -80,40},{-74,40}}, color={0,0,127}));
+  connect(limiter1.y, switch.u3) annotation (Line(points={{-51,-40},{-46,-40},{-46,
+          -8},{-36,-8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,100},{100,-100}},
@@ -134,7 +130,7 @@ end if;
 <p>The output is a heat flow.</p>
 <p>If the Boolean parameter limited_heat is false, the boiler has infinite heat flow. </p>
 <p>If the Boolean parameter limited_heat is true, the boiler has a maximal heat flow. Higher nominal inputs are limited at maximal heat flow. </p>
-<p>The boiler also has a lower heat flow limitation. It is set by parameter PartLoad (in percent). For disabling lower heat flow limit set PartLoad=0.</p>
+<p>The boiler also has a lower heat flow limitation(in case of limited heat). It is set by parameter PartLoad (in percent). For disabling lower heat flow limit set PartLoad=0.</p>
 <p>Additionally the model has a counter for the heat flow (integrator). </p>
 <p>The use of parameter <code>TimeFirstOrder </code>allows a first order behavior of the boiler. </p>
 </html>"));

@@ -42,7 +42,7 @@ Modelica.Blocks.Continuous.Derivative Slope(
     Thigh=363.15,
     Tlow=313.15,
     Tref=313.15,
-    Hboard(start=22, fixed=true))
+    Hboard(start=21.99999, fixed=true))
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 equation
 
