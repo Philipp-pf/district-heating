@@ -170,19 +170,18 @@ connect(consumerTimeDependExt.positive_heat_flow, Net_source.y[6])
     annotation (Line(points={{-36,-50},{-22,-50}}, color={191,0,0}));
   connect(heatFlowSensorStraw.port_b, heatFlowSensorWood.port_b) annotation (
       Line(points={{-2,-50},{10,-50},{10,14},{-2,14}}, color={191,0,0}));
-  connect(fuelEfficiencyWood.u1, heatFlowSensorWood.Q_flow) annotation (Line(
-        points={{-34,32},{-34,32},{-34,-2},{-34,-4},{-12,-4},{-12,4}}, color={0,
-          0,127}));
-  connect(fuelEfficiencyWood.u, Wood.nominal_heat) annotation (Line(points={{-46,
-          32},{-46,28},{-60,28},{-60,14},{-56.4,14}}, color={0,0,127}));
-  connect(heatFlowSensorStraw.Q_flow,fuelEfficiencyStraw. u1) annotation (Line(
-        points={{-12,-60},{-12,-60},{-12,-68},{-34,-68},{-34,-30}}, color={0,0,127}));
-  connect(fuelEfficiencyStraw.u, Straw.nominal_heat) annotation (Line(points={{-46,-30},
-          {-46,-36},{-60,-36},{-60,-50},{-56.4,-50}},      color={0,0,127}));
   connect(limiter.u, PID.y)
     annotation (Line(points={{-58,60},{19,60}}, color={0,0,127}));
   connect(limiter.y, heatFlowDivisor.u1) annotation (Line(points={{-81,60},{-94,
           60},{-94,-14},{-90,-14}}, color={0,0,127}));
+  connect(heatFlowSensorWood.Q_flow, fuelEfficiencyWood.u) annotation (Line(
+        points={{-12,4},{-12,-2},{-46,-2},{-46,32}}, color={0,0,127}));
+  connect(fuelEfficiencyWood.u1, Wood.nominal_heat) annotation (Line(points={{
+          -34,32},{-34,32},{-34,28},{-56.4,28},{-56.4,14}}, color={0,0,127}));
+  connect(heatFlowSensorStraw.Q_flow, fuelEfficiencyStraw.u) annotation (Line(
+        points={{-12,-60},{-12,-66},{-46,-66},{-46,-30}}, color={0,0,127}));
+  connect(fuelEfficiencyStraw.u1, Straw.nominal_heat) annotation (Line(points={
+          {-34,-30},{-34,-36},{-60,-36},{-60,-50},{-56.4,-50}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
