@@ -140,7 +140,8 @@ Modelica.SIunits.Heat StoreLossesOrig
         rotation=90,
         origin={0,-34})));
 
-  StorageTwoLayerNoLimitFindU Store(
+  Components.Storage.StorageTwoLayerNoLimitFindU
+                              Store(
     V=137,
     H=22,
     rho=water.rho,
