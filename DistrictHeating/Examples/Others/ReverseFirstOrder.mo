@@ -1,12 +1,12 @@
 within DistrictHeating.Examples.Others;
 model ReverseFirstOrder "Test of first order"
-  import ReverseFirstOrder;
 
 extends Modelica.Icons.Example;
   parameter String fileNameStrawNew = Modelica.Utilities.Files.loadResource("modelica://DistrictHeating/Resources/Data/Straw_original_changed.txt")
     "File on which data is present" annotation(Dialog(loadSelector(filter = "Text files (*.txt)", caption = "Open text file to read parameters of the form \"name = value\"")));
 
-  ReverseFirstOrder reverseFirstOrder(
+  Components.Others.ReverseFirstOrder
+                    reverseFirstOrder(
     k=1,
     u_start=0,
     yMin=0,
